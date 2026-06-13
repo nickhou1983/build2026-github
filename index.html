@@ -202,6 +202,218 @@
     .badge-new { background: rgba(130,80,223,0.1); color: var(--purple); }
     .badge-exp { background: rgba(191,135,0,0.1); color: var(--orange); }
 
+    /* ===== Copilot Positioning Slide ===== */
+    .positioning-slide {
+      background: #eef3ff;
+    }
+
+    .positioning-slide::before {
+      background: linear-gradient(90deg, #4488e8, #7c3aed, #22c55e);
+      opacity: 1;
+    }
+
+    .positioning-wrap {
+      max-width: 1180px;
+    }
+
+    .positioning-title {
+      font-size: 3rem;
+      line-height: 1.1;
+      font-weight: 900;
+      color: #17184f;
+      margin-bottom: 10px;
+    }
+
+    .positioning-title .brand {
+      color: #17184f;
+    }
+
+    .positioning-subtitle {
+      color: #52637a;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .positioning-rule {
+      width: 320px;
+      height: 4px;
+      background: #4488e8;
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+
+    .positioning-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .positioning-card {
+      min-height: 430px;
+      border-radius: 14px;
+      padding: 28px 26px;
+      border: 1px solid rgba(31,35,40,0.08);
+      box-shadow: 0 10px 26px rgba(31,35,40,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .positioning-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 7px;
+    }
+
+    .positioning-card.blue {
+      background: #eaf1ff;
+    }
+
+    .positioning-card.blue::before {
+      background: #4488e8;
+    }
+
+    .positioning-card.purple {
+      background: #f1eaff;
+    }
+
+    .positioning-card.purple::before {
+      background: #7c3aed;
+    }
+
+    .positioning-card.green {
+      background: #ecfdf3;
+    }
+
+    .positioning-card.green::before {
+      background: #22c55e;
+    }
+
+    .positioning-card-head {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid rgba(82,99,122,0.16);
+      margin-bottom: 22px;
+    }
+
+    .positioning-num {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.7rem;
+      font-weight: 900;
+    }
+
+    .blue .positioning-num {
+      background: #d7e7ff;
+      color: #4488e8;
+      border: 1px solid #4488e8;
+    }
+
+    .purple .positioning-num {
+      background: #e7d7ff;
+      color: #7c3aed;
+      border: 1px solid #7c3aed;
+    }
+
+    .green .positioning-num {
+      background: #d8f7df;
+      color: #22c55e;
+      border: 1px solid #22c55e;
+    }
+
+    .positioning-card h3 {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .positioning-card .product {
+      color: #52637a;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .positioning-icon {
+      font-size: 2rem;
+      margin-right: 8px;
+    }
+
+    .positioning-points {
+      list-style: none;
+    }
+
+    .positioning-points li {
+      margin-bottom: 20px;
+      padding-left: 22px;
+      position: relative;
+    }
+
+    .positioning-points li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .blue .positioning-points li::before {
+      background: #4488e8;
+    }
+
+    .purple .positioning-points li::before {
+      background: #7c3aed;
+    }
+
+    .green .positioning-points li::before {
+      background: #22c55e;
+    }
+
+    .positioning-points strong {
+      display: block;
+      color: #172033;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .positioning-points span {
+      display: block;
+      color: #52637a;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .positioning-footer {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: #181b55;
+      color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .positioning-footer div {
+      text-align: center;
+      padding: 14px 12px;
+      border-right: 1px solid rgba(255,255,255,0.22);
+    }
+
+    .positioning-footer div:last-child {
+      border-right: 0;
+    }
+
     /* ===== Stats ===== */
     .stats-row {
       display: grid;
@@ -401,6 +613,12 @@
       .two-col { grid-template-columns: 1fr; }
       .stat-number { font-size: 3rem; }
       .nav-dots { display: none; }
+      .positioning-title { font-size: 2rem; }
+      .positioning-grid { grid-template-columns: 1fr; }
+      .positioning-card { min-height: auto; }
+      .positioning-footer { grid-template-columns: 1fr; }
+      .positioning-footer div { border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.22); }
+      .positioning-footer div:last-child { border-bottom: 0; }
     }
   </style>
 </head>
@@ -420,6 +638,107 @@
     <h1>GitHub @ Microsoft Build 2026</h1>
     <p class="subtitle">核心发布亮点总览</p>
     <p class="date">2026年6月2日 · 旧金山</p>
+  </div>
+</section>
+
+<!-- SLIDE 2: Copilot Positioning -->
+<section class="slide positioning-slide" id="slide-positioning">
+  <div class="slide-content positioning-wrap">
+    <h2 class="positioning-title"><span class="brand">GitHub Copilot:</span> 开发者 + 新的定位</h2>
+    <p class="positioning-subtitle">从 IDE 插件到 SDK 集成，灵活选择最适合团队的 AI 编程接入路径</p>
+    <div class="positioning-rule"></div>
+
+    <div class="positioning-grid">
+      <article class="positioning-card blue">
+        <div class="positioning-card-head">
+          <div class="positioning-num">01</div>
+          <div>
+            <h3><span class="positioning-icon">💻</span>代码驱动开发</h3>
+            <p class="product">GitHub Copilot</p>
+          </div>
+        </div>
+        <ul class="positioning-points">
+          <li>
+            <strong>覆盖主流 IDE</strong>
+            <span>VS Code · JetBrains · Xcode · Neovim</span>
+          </li>
+          <li>
+            <strong>第三方 Agent 支持</strong>
+            <span>接入 Claude Agent · Codex Agent</span>
+          </li>
+          <li>
+            <strong>Agent + Skill</strong>
+            <span>Agentic 编码，支持 Skill / MCP</span>
+          </li>
+          <li>
+            <strong>Copilot CLI / OpenCode 命令行</strong>
+            <span>在终端内辅助编码，开箱即用</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="positioning-card purple">
+        <div class="positioning-card-head">
+          <div class="positioning-num">02</div>
+          <div>
+            <h3><span class="positioning-icon">🌐</span>Agent 驱动开发</h3>
+            <p class="product">GitHub Copilot App</p>
+          </div>
+        </div>
+        <ul class="positioning-points">
+          <li>
+            <strong>专门设计的轻量级 Agent App</strong>
+            <span>面向业务人员设计的 Agent 工作台</span>
+          </li>
+          <li>
+            <strong>轻量终端工作流</strong>
+            <span>设置工作流，自动化工作负载</span>
+          </li>
+          <li>
+            <strong>GitHub 多模型支持和集成</strong>
+            <span>直接使用 GitHub Copilot 后端模型</span>
+          </li>
+          <li>
+            <strong>开源可扩展</strong>
+            <span>开源项目、社区驱动，可自定义 Agent 行为和工具集成</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="positioning-card green">
+        <div class="positioning-card-head">
+          <div class="positioning-num">03</div>
+          <div>
+            <h3><span class="positioning-icon">🔧</span>流程中的智能体</h3>
+            <p class="product">GitHub Copilot SDK</p>
+          </div>
+        </div>
+        <ul class="positioning-points">
+          <li>
+            <strong>集成现有平台</strong>
+            <span>嵌入自研 IDE、DevOps 平台或内部工具链</span>
+          </li>
+          <li>
+            <strong>流程自动化</strong>
+            <span>代码生成、审查、测试等流程自动化</span>
+          </li>
+          <li>
+            <strong>企业级业务场景扩展</strong>
+            <span>通用 Agent 场景，如微软 Clawpilot</span>
+          </li>
+          <li>
+            <strong>API 级别控制</strong>
+            <span>模型选择、上下文注入、权限控制、会话管理</span>
+          </li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="positioning-footer">
+      <div>💻 IDE 原生集成 · 开箱即用</div>
+      <div>🌐 OpenCode · GitHub 登录 · 终端优先</div>
+      <div>🔧 SDK 集成 · 嵌入平台 · 流程自动化</div>
+    </div>
   </div>
 </section>
 
