@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub Copilot Token 优化指南｜HTML 版本</title>
+  <style>
+    :root {
+      --navy: #0b2645;
+      --navy-2: #123a63;
+      --orange: #f47a2a;
+      --gold: #f5b84b;
+      --paper: #fbf7ef;
+      --ink: #142033;
+      --muted: #667085;
+      --line: #d8e0ea;
+      --card: #ffffff;
+      --shadow: 0 22px 60px rgba(11, 38, 69, 0.14);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(244, 122, 42, 0.18), transparent 36rem),
+        linear-gradient(180deg, #f6f9fc 0%, var(--paper) 48%, #ffffff 100%);
+      line-height: 1.62;
+    }
+    a { color: inherit; }
+    .hero {
+      min-height: 82vh;
+      padding: 72px clamp(22px, 5vw, 86px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 56px;
+      align-items: center;
+      background: linear-gradient(135deg, var(--navy) 0%, #173f68 58%, #2c4d70 100%);
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: auto -12% -28% auto;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244, 122, 42, 0.38), transparent 62%);
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .kicker::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 5px rgba(244, 122, 42, 0.18);
+    }
+    h1 {
+      margin: 28px 0 18px;
+      font-size: clamp(42px, 7.2vw, 86px);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+    .hero .lead {
+      max-width: 760px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: clamp(18px, 2.1vw, 25px);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .button.primary { background: var(--orange); color: white; }
+    .button.secondary { background: rgba(255, 255, 255, 0.08); color: white; }
+    .hero-preview {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 28px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .hero-preview img {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+      background: white;
+    }
+    main { padding: 0 clamp(20px, 5vw, 86px) 80px; }
+    .section {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 72px 0 0;
+    }
+    .section-title {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.55fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+    .eyebrow {
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 8px 0 0;
+      color: var(--navy);
+      font-size: clamp(30px, 4.6vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+    .section-title p { margin: 0; color: var(--muted); font-size: 17px; }
+    .insights {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .insight {
+      min-height: 190px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--card);
+      box-shadow: 0 12px 28px rgba(11, 38, 69, 0.07);
+    }
+    .insight strong {
+      display: block;
+      color: var(--navy);
+      font-size: 36px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 14px;
+    }
+    .insight p { margin: 0; color: var(--muted); }
+    .lever-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .lever-card {
+      padding: 22px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      border: 1px solid var(--line);
+      min-height: 210px;
+    }
+    .lever-card span {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      color: white;
+      background: var(--navy);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .lever-card h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 20px;
+    }
+    .lever-card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .toc {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px;
+      margin: 0 0 22px;
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      background: rgba(251, 247, 239, 0.88);
+      border: 1px solid rgba(216, 224, 234, 0.8);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+    }
+    .toc a {
+      white-space: nowrap;
+      padding: 10px 13px;
+      border-radius: 12px;
+      background: white;
+      color: var(--navy);
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid var(--line);
+    }
+    .slides {
+      display: grid;
+      gap: 22px;
+    }
+    .slide-card {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.78fr) minmax(420px, 1.22fr);
+      gap: 24px;
+      padding: 24px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 42px rgba(11, 38, 69, 0.08);
+    }
+    .slide-copy h3 {
+      margin: 8px 0 6px;
+      color: var(--navy);
+      font-size: clamp(25px, 3vw, 38px);
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+    .subtitle {
+      margin: 0 0 16px;
+      color: var(--orange);
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .slide-copy p:not(.subtitle) {
+      margin: 0 0 18px;
+      color: #344054;
+      font-size: 16px;
+    }
+    .slide-copy ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+    .slide-copy li {
+      position: relative;
+      padding-left: 24px;
+      color: var(--muted);
+    }
+    .slide-copy li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+    .slide-shot {
+      align-self: center;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: white;
+      box-shadow: 0 18px 34px rgba(11, 38, 69, 0.12);
+    }
+    .slide-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .step {
+      padding: 18px 14px;
+      border-radius: 20px;
+      background: var(--navy);
+      color: white;
+      min-height: 150px;
+    }
+    .step strong {
+      display: block;
+      color: var(--gold);
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .step p { margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.86); }
+    .step.hot { background: linear-gradient(180deg, var(--orange), #c95112); }
+    .step.hot strong { color: white; }
+    footer {
+      margin-top: 80px;
+      padding: 34px clamp(20px, 5vw, 86px);
+      color: rgba(255, 255, 255, 0.78);
+      background: var(--navy);
+    }
+    footer strong { color: white; }
+    @media (max-width: 1050px) {
+      .hero, .section-title, .slide-card { grid-template-columns: 1fr; }
+      .insights, .lever-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .checklist { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .hero { padding-top: 42px; }
+      .insights, .lever-grid, .checklist { grid-template-columns: 1fr; }
+      .slide-card { padding: 16px; border-radius: 22px; }
+    }
+    @media print {
+      .toc, .hero-actions { display: none; }
+      .hero { min-height: auto; color: var(--ink); background: white; }
+      .slide-card { break-inside: avoid; box-shadow: none; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <div class="kicker">HTML version · Token optimization</div>
+      <h1>GitHub Copilot Token 优化指南</h1>
+      <p class="lead">基于目录中的 PPT 生成的网页版本：保留原始幻灯片视觉预览，并将内容重构为适合浏览、分享和复盘的长页分析。</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#summary">查看核心结论</a>
+        <a class="button secondary" href="#slides">浏览逐页版本</a>
+      </div>
+    </div>
+    <a class="hero-preview" href="html-assets/slide-01.png" target="_blank" rel="noopener">
+      <img src="html-assets/slide-01.png" alt="GitHub Copilot Token 优化指南封面">
+    </a>
+  </header>
+
+  <main>
+    <section class="section" id="summary">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Executive summary</div>
+          <h2>这份 PPT 的核心判断</h2>
+        </div>
+        <p>UBB 的本质不是让 Copilot 变贵，而是把提示词、上下文、输出、工具和模型选择这些工程决策变成可度量成本。</p>
+      </div>
+      <div class="insights">
+        <div class="insight"><strong>90%+</strong><p>真实成本通常来自系统提示词、仓库指令、文件上下文、对话历史和工具 Schema 等隐藏输入。</p></div>
+        <div class="insight"><strong>4×–8×</strong><p>输出 token 普遍比输入 token 贵，控制回答长度是最高 ROI 杠杆。</p></div>
+        <div class="insight"><strong>5–25×</strong><p>模糊需求直接跑 Agent，可能比一次聚焦 Ask 调用贵 5 到 25 倍。</p></div>
+        <div class="insight"><strong>-72%</strong><p>真实案例中，MCP 工具从 188 个降到 52 个，每个 Agent 任务节省约 1.3 万 token。</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="levers">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">8 levers</div>
+          <h2>降本的 8 根杠杆</h2>
+        </div>
+        <p>优先级建议：先处理常驻上下文、MCP 工具和输出控制；这些动作一次配置，长期复利。</p>
+      </div>
+      <div class="lever-grid">
+        
+      <div class="lever-card">
+        <span>01</span>
+        <h3>提示词压缩</h3>
+        <p>去掉客套与零信息词，保留技术细节；优先用结构化和代码原生表达。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>02</span>
+        <h3>语言选择</h3>
+        <p>Copilot 代码场景优先英文；中文接近英文，但不同模型分词成本差异很大。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>03</span>
+        <h3>上下文管理</h3>
+        <p>把规则拆成常驻、条件加载、按需三层，用 applyTo 控制加载范围。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>04</span>
+        <h3>输出控制</h3>
+        <p>在系统/仓库指令中加入长度和格式上限，直接压缩最贵的输出 token。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>05</span>
+        <h3>工作流模式</h3>
+        <p>Ask / Plan / Agent 逐级升级，别用模糊需求直接启动 Agent。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>06</span>
+        <h3>模型路由</h3>
+        <p>大模型规划，小模型执行；复杂任务才切到更高推理强度。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>07</span>
+        <h3>AGENTS.md 卫生</h3>
+        <p>只写 Agent 从代码里猜不到的地雷，删除项目 wiki 式噪声。</p>
+      </div>
+    
+
+      <div class="lever-card">
+        <span>08</span>
+        <h3>MCP 精简</h3>
+        <p>按工作区启用工具，定期清理低使用率服务器，减少 Schema 税。</p>
+      </div>
+    
+      </div>
+    </section>
+
+    <section class="section" id="action">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Action checklist</div>
+          <h2>明天就能开始的 7 步</h2>
+        </div>
+        <p>如果时间有限，先做高亮的 1、3、6：压缩常驻指令、清理 MCP、拆分 applyTo 指令文件。</p>
+      </div>
+      <div class="checklist">
+        <div class="step hot"><strong>1</strong><p>10 分钟压缩 copilot-instructions.md</p></div>
+        <div class="step"><strong>2</strong><p>1 分钟在提示词末尾加输出上限</p></div>
+        <div class="step hot"><strong>3</strong><p>15 分钟盘点并禁用没用到的 MCP 服务器</p></div>
+        <div class="step"><strong>4</strong><p>默认 Ask，确有必要时再切 Agent</p></div>
+        <div class="step"><strong>5</strong><p>默认 Auto，必要时再切高级模型</p></div>
+        <div class="step hot"><strong>6</strong><p>15 分钟添加 applyTo 限定范围的指令文件</p></div>
+        <div class="step"><strong>7</strong><p>每月做一次配置回顾</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="slides">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Slide-by-slide</div>
+          <h2>逐页 HTML 版本</h2>
+        </div>
+        <p>左侧为网页化分析与提炼，右侧为从原 PPT 渲染的对应幻灯片预览；点击图片可查看大图。</p>
+      </div>
+      <nav class="toc" aria-label="幻灯片目录">
+        <a href="#slide-01">01. GitHub Copilot Token 优化指南</a>
+<a href="#slide-02">02. 基础：Token 到底是怎么工作的</a>
+<a href="#slide-03">03. 6 月 1 日的转折点</a>
+<a href="#slide-04">04. 什么是 Token？</a>
+<a href="#slide-05">05. Token 都去哪了</a>
+<a href="#slide-06">06. 贵的是输出</a>
+<a href="#slide-07">07. GitHub Token 优化关键技术</a>
+<a href="#slide-08">08. 实战手册：降本的 8 根杠杆</a>
+<a href="#slide-09">09. 杠杆 1：提示词压缩</a>
+<a href="#slide-10">10. 结构化与代码原生表达</a>
+<a href="#slide-11">11. 杠杆 2：语言税</a>
+<a href="#slide-12">12. 杠杆 3：上下文管理</a>
+<a href="#slide-13">13. 杠杆 4：输出控制</a>
+<a href="#slide-14">14. 杠杆 5：工作流模式</a>
+<a href="#slide-15">15. 杠杆 6：模型路由与推理强度</a>
+<a href="#slide-16">16. 杠杆 7：AGENTS.md</a>
+<a href="#slide-17">17. 杠杆 8：MCP 工具 Schema 税</a>
+<a href="#slide-18">18. 行动清单与结语</a>
+      </nav>
+      <div class="slides">
+        
+      <article class="slide-card" id="slide-01">
+        <div class="slide-copy">
+          <div class="eyebrow">开场 · Slide 01</div>
+          <h3>GitHub Copilot Token 优化指南</h3>
+          <p class="subtitle">面向用量计费时代的工程实战手册</p>
+          <p>把 UBB 时代的 Copilot 使用从“凭感觉”转向可度量、可优化的工程实践。</p>
+          <ul><li>Token 将成为可见成本</li>
+<li>优化目标不是少用 Copilot，而是提高每个 token 的信息密度</li>
+<li>后续内容围绕成本来源与 8 个降本杠杆展开</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-01.png" target="_blank" rel="noopener"><img src="html-assets/slide-01.png" alt="Slide 1: GitHub Copilot Token 优化指南" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-02">
+        <div class="slide-copy">
+          <div class="eyebrow">基础 · Slide 02</div>
+          <h3>基础：Token 到底是怎么工作的</h3>
+          <p class="subtitle">建立共同语言</p>
+          <p>在讨论优化之前，先理解 token、上下文窗口、输入输出价格差异三个基本概念。</p>
+          <ul><li>Token 不是字符，也不是单词</li>
+<li>上下文窗口里真正昂贵的是隐藏输入</li>
+<li>输出 token 通常比输入 token 贵 4×–8×</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-02.png" target="_blank" rel="noopener"><img src="html-assets/slide-02.png" alt="Slide 2: 基础：Token 到底是怎么工作的" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-03">
+        <div class="slide-copy">
+          <div class="eyebrow">背景 · Slide 03</div>
+          <h3>6 月 1 日的转折点</h3>
+          <p class="subtitle">用量计费改变了游戏规则</p>
+          <p>用户输入只是水面上的一小块，系统提示词、仓库指令、文件上下文、对话历史和工具 Schema 才是成本主体。</p>
+          <ul><li>每次提示、工具调用、Agent 步骤都会形成可量化账单</li>
+<li>隐藏结构性开销通常占一次请求的 90% 以上</li>
+<li>优化重点应从“少打字”转向“缩小整座上下文冰山”</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-03.png" target="_blank" rel="noopener"><img src="html-assets/slide-03.png" alt="Slide 3: 6 月 1 日的转折点" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-04">
+        <div class="slide-copy">
+          <div class="eyebrow">基础 · Slide 04</div>
+          <h3>什么是 Token？</h3>
+          <p class="subtitle">BPE 子词：既不是字符，也不是单词</p>
+          <p>现代 LLM 使用 Byte Pair Encoding 切分文本；短文本不一定便宜，真正关键是表达密度。</p>
+          <ul><li>常见英文词经常是单 token</li>
+<li>复杂词会拆成多个子词</li>
+<li>结构化、代码化表达通常比散文更省 token</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-04.png" target="_blank" rel="noopener"><img src="html-assets/slide-04.png" alt="Slide 4: 什么是 Token？" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-05">
+        <div class="slide-copy">
+          <div class="eyebrow">成本结构 · Slide 05</div>
+          <h3>Token 都去哪了</h3>
+          <p class="subtitle">上下文窗口的冰山</p>
+          <p>一次看似很短的输入，会叠加系统提示词、指令文件、文件上下文、历史消息与工具定义。</p>
+          <ul><li>输入 20 个字符可能触发 2,000+ token</li>
+<li>Agent 会话累积 5 万 token 很常见</li>
+<li>长期对话、工具 Schema 和上下文重载会相互放大</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-05.png" target="_blank" rel="noopener"><img src="html-assets/slide-05.png" alt="Slide 5: Token 都去哪了" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-06">
+        <div class="slide-copy">
+          <div class="eyebrow">经济性 · Slide 06</div>
+          <h3>贵的是输出</h3>
+          <p class="subtitle">各家厂商普遍 4×–8×</p>
+          <p>输出价格显著高于输入，控制回复长度是 ROI 最高的优化动作之一。</p>
+          <ul><li>GPT-5 mini 输出约为输入 8×</li>
+<li>GPT-5.4 / Gemini 3.1 Pro 约为 6×</li>
+<li>一条输出格式约束可持续降低 40–70% 输出成本</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-06.png" target="_blank" rel="noopener"><img src="html-assets/slide-06.png" alt="Slide 6: 贵的是输出" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-07">
+        <div class="slide-copy">
+          <div class="eyebrow">平台杠杆 · Slide 07</div>
+          <h3>GitHub Token 优化关键技术</h3>
+          <p class="subtitle">平台侧的 6 类优化</p>
+          <p>Copilot 通过缓存、延迟加载、后台小模型、增量传输等方式降低主模型 token 消耗。</p>
+          <ul><li>Prompt 缓存复用稳定前缀</li>
+<li>Tool Search 延迟加载减少工具 Schema</li>
+<li>Agentic Search / Execution 把搜索与终端执行卸载给小模型</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-07.png" target="_blank" rel="noopener"><img src="html-assets/slide-07.png" alt="Slide 7: GitHub Token 优化关键技术" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-08">
+        <div class="slide-copy">
+          <div class="eyebrow">方法论 · Slide 08</div>
+          <h3>实战手册：降本的 8 根杠杆</h3>
+          <p class="subtitle">从个人提示词到团队配置</p>
+          <p>后半部分从提示词、语言、上下文、输出、工作流、模型、AGENTS.md 和 MCP 八个方向展开。</p>
+          <ul><li>优先处理常驻上下文和输出长度</li>
+<li>用最便宜但足够完成任务的模式与模型</li>
+<li>工具和规则都应按需加载</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-08.png" target="_blank" rel="noopener"><img src="html-assets/slide-08.png" alt="Slide 8: 实战手册：降本的 8 根杠杆" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-09">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 1 · Slide 09</div>
+          <h3>杠杆 1：提示词压缩</h3>
+          <p class="subtitle">扔掉脚手架</p>
+          <p>删除客套和零信息量词，保留技术细节；输入和输出压缩是两个独立旋钮。</p>
+          <ul><li>礼貌请求可压缩为直接指令</li>
+<li>Lite / Full / Ultra 三档对应不同歧义风险</li>
+<li>默认建议采用 Full：30–50% 输入节省，40–55% 输出节省</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-09.png" target="_blank" rel="noopener"><img src="html-assets/slide-09.png" alt="Slide 9: 杠杆 1：提示词压缩" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-10">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 1 续 · Slide 10</div>
+          <h3>结构化与代码原生表达</h3>
+          <p class="subtitle">同一任务，选择更便宜的表达</p>
+          <p>伪代码、类型签名、“像 X 但要 Y”等表达通常比自然语言更短，模型理解效果相近。</p>
+          <ul><li>REST API 需求从散文改为结构化可省约 36%</li>
+<li>自然语言、伪代码、类型签名、类比式表达成本依次降低</li>
+<li>声明式规则比命令式步骤更容易叠加</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-10.png" target="_blank" rel="noopener"><img src="html-assets/slide-10.png" alt="Slide 10: 结构化与代码原生表达" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-11">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 2 · Slide 11</div>
+          <h3>杠杆 2：语言税</h3>
+          <p class="subtitle">为什么英文最划算</p>
+          <p>对 Copilot 中主流 LLM 而言，英文通常是最便宜的提示词语言；中文接近英文，但不同厂商差异明显。</p>
+          <ul><li>非英文平均成本：Gemini / Qwen 较低，Anthropic 较高</li>
+<li>中文平均接近英文，约 1.02×</li>
+<li>代码相关提示优先用英文，避免不必要翻译</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-11.png" target="_blank" rel="noopener"><img src="html-assets/slide-11.png" alt="Slide 11: 杠杆 2：语言税" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-12">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 3 · Slide 12</div>
+          <h3>杠杆 3：上下文管理</h3>
+          <p class="subtitle">缩小永远会被加载的部分</p>
+          <p>把规则拆成常驻、条件加载、按需三层，并用 applyTo 限定范围，避免每轮加载全量 wiki。</p>
+          <ul><li>常驻规则只保留风格、命名、输出限制</li>
+<li>API / 数据库 / 模块规则用路径匹配条件加载</li>
+<li>PR 清单、调试手册、迁移手册改为按需调用</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-12.png" target="_blank" rel="noopener"><img src="html-assets/slide-12.png" alt="Slide 12: 杠杆 3：上下文管理" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-13">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 4 · Slide 13</div>
+          <h3>杠杆 4：输出控制</h3>
+          <p class="subtitle">ROI 最高的一条指令</p>
+          <p>在 copilot-instructions.md 中设置输出上限，可永久压缩高价输出 token。</p>
+          <ul><li>Code only, no explanation 可省 60–80%</li>
+<li>Yes or no, then one line why 可省 70–90%</li>
+<li>需要学习或排查时再显式要求解释</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-13.png" target="_blank" rel="noopener"><img src="html-assets/slide-13.png" alt="Slide 13: 杠杆 4：输出控制" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-14">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 5 · Slide 14</div>
+          <h3>杠杆 5：工作流模式</h3>
+          <p class="subtitle">Ask、Plan、Agent</p>
+          <p>用最便宜且能完成任务的模式；模糊提示直接跑 Agent 是最烧钱的反模式。</p>
+          <ul><li>Ask：单次调用，适合提问和解释</li>
+<li>Plan：单次调用，适合方案设计</li>
+<li>Agent：多步调用，适合多文件重构和端到端实现</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-14.png" target="_blank" rel="noopener"><img src="html-assets/slide-14.png" alt="Slide 14: 杠杆 5：工作流模式" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-15">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 6 · Slide 15</div>
+          <h3>杠杆 6：模型路由与推理强度</h3>
+          <p class="subtitle">让贵模型负责想，便宜模型负责敲字</p>
+          <p>混合路由通常比单一模型策略省 25–55%，尤其适合规划与执行分离的工作流。</p>
+          <ul><li>GPT mini / Auto：语法、API 查询、一次性问题</li>
+<li>Sonnet：日常实现与重构主力</li>
+<li>Opus：架构、安全审计、复杂新问题</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-15.png" target="_blank" rel="noopener"><img src="html-assets/slide-15.png" alt="Slide 15: 杠杆 6：模型路由与推理强度" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-16">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 7 · Slide 16</div>
+          <h3>杠杆 7：AGENTS.md</h3>
+          <p class="subtitle">保留地雷，删除噪声</p>
+          <p>AGENTS.md 应记录代码无法推断的约束，而不是成为项目 wiki；噪声会增加成本甚至降低正确率。</p>
+          <ul><li>保留：Use uv, not pip；Deploy needs VPN；Do not refactor auth</li>
+<li>删除：This is a Python project；Tests live in tests/</li>
+<li>把指令文件当作 bug 追踪器，而不是百科全书</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-16.png" target="_blank" rel="noopener"><img src="html-assets/slide-16.png" alt="Slide 16: 杠杆 7：AGENTS.md" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-17">
+        <div class="slide-copy">
+          <div class="eyebrow">杠杆 8 · Slide 17</div>
+          <h3>杠杆 8：MCP 工具 Schema 税</h3>
+          <p class="subtitle">每个启用工具都会在每一步重发</p>
+          <p>MCP 工具越多，Agent 步数越多，Schema 重载成本越高；应按工作区配置而非全局启用。</p>
+          <ul><li>188 个工具跑 30 步可带来约 330K token</li>
+<li>真实盘点从 188 个工具降到 52 个，减少 72%</li>
+<li>任务不需要的 MCP 服务器就关闭</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-17.png" target="_blank" rel="noopener"><img src="html-assets/slide-17.png" alt="Slide 17: 杠杆 8：MCP 工具 Schema 税" loading="lazy"></a>
+      </article>
+    
+
+      <article class="slide-card" id="slide-18">
+        <div class="slide-copy">
+          <div class="eyebrow">收束 · Slide 18</div>
+          <h3>行动清单与结语</h3>
+          <p class="subtitle">UBB 没有让 Copilot 变贵，只是让“不动脑子”变贵了</p>
+          <p>7 步行动清单中，压缩指令、禁用无用 MCP、添加 applyTo 收益最大；Token 优化同时提升成本效率与模型注意力。</p>
+          <ul><li>10 分钟压缩 copilot-instructions.md</li>
+<li>15 分钟盘点 MCP 与 applyTo 指令文件</li>
+<li>每月做一次配置回顾，让节省变成团队习惯</li></ul>
+        </div>
+        <a class="slide-shot" href="html-assets/slide-18.png" target="_blank" rel="noopener"><img src="html-assets/slide-18.png" alt="Slide 18: 行动清单与结语" loading="lazy"></a>
+      </article>
+    
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>来源：</strong>GitHub-Copilot-Token-Optimization-Asia-Software-GBB-CN.pptx · 生成文件：index.html · 静态资源：html-assets/
+  </footer>
+</body>
+</html>
