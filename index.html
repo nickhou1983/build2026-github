@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GitHub @ Microsoft Build 2026 — 核心发布亮点</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
   <style>
     :root {
       --bg: #ffffff;
@@ -14,997 +16,354 @@
       --green: #1a7f37;
       --purple: #8250df;
       --orange: #bf8700;
-      --red: #cf222e;
       --text: #1f2328;
       --muted: #656d76;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .reveal { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; color: var(--text); }
+    .reveal .slides { text-align: left; }
+    .reveal .slides section { height: 100%; }
+    .reveal h1, .reveal h2, .reveal h3 { color: var(--text); text-transform: none; letter-spacing: normal; font-weight: 800; }
+    .reveal p { color: var(--muted); }
+    .reveal section img { border: none; box-shadow: none; }
 
-    html {
-      scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    /* ===== Slide Layout ===== */
-    .slide {
-      min-height: 100vh;
-      scroll-snap-align: start;
+    .slide-inner {
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      padding: 60px 40px;
-      position: relative;
-      overflow: hidden;
+      padding: 10px 20px;
     }
 
-    .slide::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--purple), var(--green));
-      opacity: 0.8;
-    }
-
-    .slide-content {
-      max-width: 1100px;
-      width: 100%;
-      animation: fadeUp 0.6s ease-out both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== Title Slide ===== */
-    .title-slide {
-      text-align: center;
-      position: relative;
-    }
-
-    .title-slide .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.08;
-      animation: pulse 6s ease-in-out infinite alternate;
-    }
-
-    .title-slide .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
-    .title-slide .orb-2 { width: 300px; height: 300px; background: var(--purple); bottom: -80px; right: -80px; animation-delay: 3s; }
-    .title-slide .orb-3 { width: 250px; height: 250px; background: var(--green); top: 50%; right: 10%; animation-delay: 1.5s; }
-
-    @keyframes pulse {
-      from { transform: scale(1); opacity: 0.06; }
-      to { transform: scale(1.15); opacity: 0.12; }
-    }
-
-    .github-logo {
-      width: 80px; height: 80px;
-      margin-bottom: 24px;
-      filter: drop-shadow(0 0 20px rgba(9,105,218,0.2));
-    }
-
-    .title-slide h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
+    /* ===== Title ===== */
+    .title-inner { align-items: center; text-align: center; }
+    .github-logo { width: 90px; height: 90px; margin-bottom: 24px; filter: drop-shadow(0 0 20px rgba(9,105,218,0.2)); }
+    .title-inner h1 {
+      font-size: 2.8rem; font-weight: 900; margin-bottom: 16px;
       background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 16px;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-
-    .title-slide .subtitle {
-      font-size: 1.4rem;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .title-slide .date {
-      font-size: 1rem;
-      color: var(--muted);
-    }
+    .title-inner .subtitle { font-size: 1.4rem; color: var(--accent); margin-bottom: 10px; }
+    .title-inner .date { font-size: 1rem; color: var(--muted); }
 
     /* ===== Section Header ===== */
-    .section-num {
-      font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 0.85rem;
-      color: var(--accent);
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-      opacity: 0.8;
-    }
-
-    .slide-content h2 {
-      font-size: 2.4rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-
-    .slide-content .slide-subtitle {
-      font-size: 1.1rem;
-      color: var(--muted);
-      margin-bottom: 36px;
-    }
+    .section-num { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 6px; opacity: 0.85; }
+    .slide-inner h2 { font-size: 2rem; margin-bottom: 6px; line-height: 1.2; }
+    .slide-subtitle { font-size: 1rem; color: var(--muted); margin-bottom: 24px; }
 
     /* ===== Cards ===== */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .cards-grid.two { grid-template-columns: 1fr 1fr; }
+    .cards-grid.one { grid-template-columns: 1fr; }
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px 20px; position: relative; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(31,35,40,0.04);
     }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-      box-shadow: 0 8px 32px rgba(9,105,218,0.08);
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 4px; height: 100%;
-      border-radius: 4px 0 0 4px;
-    }
-
+    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
     .card.accent-blue::before { background: var(--accent); }
     .card.accent-green::before { background: var(--green); }
     .card.accent-purple::before { background: var(--purple); }
     .card.accent-orange::before { background: var(--orange); }
-
-    .card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .card .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin: 0; }
+    .card .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-bottom: 8px; }
     .badge-preview { background: rgba(9,105,218,0.1); color: var(--accent); }
     .badge-ga { background: rgba(26,127,55,0.1); color: var(--green); }
     .badge-new { background: rgba(130,80,223,0.1); color: var(--purple); }
     .badge-exp { background: rgba(191,135,0,0.1); color: var(--orange); }
 
-    /* ===== Copilot Positioning Slide ===== */
-    .positioning-slide {
-      background: #eef3ff;
-    }
-
-    .positioning-slide::before {
-      background: linear-gradient(90deg, #4488e8, #7c3aed, #22c55e);
-      opacity: 1;
-    }
-
-    .positioning-wrap {
-      max-width: 1180px;
-    }
-
-    .positioning-title {
-      font-size: 3rem;
-      line-height: 1.1;
-      font-weight: 900;
-      color: #17184f;
-      margin-bottom: 10px;
-    }
-
-    .positioning-title .brand {
-      color: #17184f;
-    }
-
-    .positioning-subtitle {
-      color: #52637a;
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-    }
-
-    .positioning-rule {
-      width: 320px;
-      height: 4px;
-      background: #4488e8;
-      border-radius: 999px;
-      margin-bottom: 22px;
-    }
-
-    .positioning-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-
-    .positioning-card {
-      min-height: 430px;
-      border-radius: 14px;
-      padding: 28px 26px;
-      border: 1px solid rgba(31,35,40,0.08);
-      box-shadow: 0 10px 26px rgba(31,35,40,0.08);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .positioning-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 7px;
-    }
-
-    .positioning-card.blue {
-      background: #eaf1ff;
-    }
-
-    .positioning-card.blue::before {
-      background: #4488e8;
-    }
-
-    .positioning-card.purple {
-      background: #f1eaff;
-    }
-
-    .positioning-card.purple::before {
-      background: #7c3aed;
-    }
-
-    .positioning-card.green {
-      background: #ecfdf3;
-    }
-
-    .positioning-card.green::before {
-      background: #22c55e;
-    }
-
-    .positioning-card-head {
-      display: grid;
-      grid-template-columns: 76px 1fr;
-      gap: 18px;
-      align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 2px solid rgba(82,99,122,0.16);
-      margin-bottom: 22px;
-    }
-
-    .positioning-num {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 1.7rem;
-      font-weight: 900;
-    }
-
-    .blue .positioning-num {
-      background: #d7e7ff;
-      color: #4488e8;
-      border: 1px solid #4488e8;
-    }
-
-    .purple .positioning-num {
-      background: #e7d7ff;
-      color: #7c3aed;
-      border: 1px solid #7c3aed;
-    }
-
-    .green .positioning-num {
-      background: #d8f7df;
-      color: #22c55e;
-      border: 1px solid #22c55e;
-    }
-
-    .positioning-card h3 {
-      font-size: 1.25rem;
-      line-height: 1.2;
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-
-    .positioning-card .product {
-      color: #52637a;
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .positioning-icon {
-      font-size: 2rem;
-      margin-right: 8px;
-    }
-
-    .positioning-points {
-      list-style: none;
-    }
-
-    .positioning-points li {
-      margin-bottom: 20px;
-      padding-left: 22px;
-      position: relative;
-    }
-
-    .positioning-points li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 8px;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-    }
-
-    .blue .positioning-points li::before {
-      background: #4488e8;
-    }
-
-    .purple .positioning-points li::before {
-      background: #7c3aed;
-    }
-
-    .green .positioning-points li::before {
-      background: #22c55e;
-    }
-
-    .positioning-points strong {
-      display: block;
-      color: #172033;
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-
-    .positioning-points span {
-      display: block;
-      color: #52637a;
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-
-    .positioning-footer {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      background: #181b55;
-      color: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
-      font-weight: 800;
-      font-size: 0.9rem;
-    }
-
-    .positioning-footer div {
-      text-align: center;
-      padding: 14px 12px;
-      border-right: 1px solid rgba(255,255,255,0.22);
-    }
-
-    .positioning-footer div:last-child {
-      border-right: 0;
-    }
+    /* ===== Highlight box ===== */
+    .highlight-box { margin-top: 22px; padding: 14px 22px; background: var(--surface); border: 1px solid var(--accent); border-radius: 8px; text-align: center; font-size: 0.9rem; color: var(--accent); }
 
     /* ===== Stats ===== */
-    .stats-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-top: 20px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 48px 32px;
-      text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
-    }
-
-    .stat-number {
-      font-size: 4rem;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 12px;
-    }
-
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; text-align: center; box-shadow: 0 4px 16px rgba(31,35,40,0.05); }
+    .stat-number { font-size: 3.6rem; font-weight: 900; line-height: 1; margin-bottom: 10px; }
     .stat-number.blue { color: var(--accent); }
     .stat-number.green { color: var(--green); }
+    .stat-label { font-size: 1.1rem; color: var(--text); margin-bottom: 6px; font-weight: 700; }
+    .stat-desc { font-size: 0.82rem; color: var(--muted); margin: 0; }
 
-    .stat-label {
-      font-size: 1.2rem;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .stat-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    /* ===== List Style ===== */
-    .feature-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .feature-list li {
-      padding: 12px 0 12px 24px;
-      position: relative;
-      font-size: 1rem;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .feature-list li:last-child { border-bottom: none; }
-
-    .feature-list li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: var(--green);
-      font-weight: bold;
-    }
-
-    .feature-list li strong {
-      color: var(--text);
-    }
-
-    /* ===== Two Column ===== */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-    }
-
-    .col-header {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--border);
-    }
-
+    /* ===== Two col list ===== */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .col-header { font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
     .col-header.orange { color: var(--orange); border-color: var(--orange); }
     .col-header.blue { color: var(--accent); border-color: var(--accent); }
+    .feature-list { list-style: none; padding: 0; margin: 0; }
+    .feature-list li { padding: 9px 0 9px 22px; position: relative; font-size: 0.9rem; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li::before { content: '▸'; position: absolute; left: 0; color: var(--green); font-weight: bold; }
+    .feature-list li strong { color: var(--text); }
+    .reveal code { background: var(--surface); padding: 1px 6px; border-radius: 4px; font-size: 0.85em; color: var(--accent); }
 
-    /* ===== Highlight Box ===== */
-    .highlight-box {
-      margin-top: 32px;
-      padding: 16px 24px;
-      background: var(--surface);
-      border: 1px solid var(--accent);
-      border-radius: 8px;
-      text-align: center;
-      font-size: 0.95rem;
-      color: var(--accent);
-    }
+    /* ===== Positioning slide ===== */
+    .positioning-slide { background: #eef3ff; }
+    .positioning-title { font-size: 2.1rem; line-height: 1.1; font-weight: 900; color: #17184f; margin-bottom: 8px; }
+    .positioning-subtitle { color: #52637a; font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .positioning-rule { width: 280px; height: 4px; background: #4488e8; border-radius: 999px; margin-bottom: 18px; }
+    .positioning-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .positioning-card { border-radius: 14px; padding: 18px 18px; border: 1px solid rgba(31,35,40,0.08); box-shadow: 0 8px 20px rgba(31,35,40,0.07); position: relative; overflow: hidden; }
+    .positioning-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; }
+    .positioning-card.blue { background: #eaf1ff; }
+    .positioning-card.blue::before { background: #4488e8; }
+    .positioning-card.purple { background: #f1eaff; }
+    .positioning-card.purple::before { background: #7c3aed; }
+    .positioning-card.green { background: #ecfdf3; }
+    .positioning-card.green::before { background: #22c55e; }
+    .positioning-card-head { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; padding-bottom: 14px; border-bottom: 2px solid rgba(82,99,122,0.16); margin-bottom: 14px; }
+    .positioning-num { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-size: 1.3rem; font-weight: 900; }
+    .blue .positioning-num { background: #d7e7ff; color: #4488e8; border: 1px solid #4488e8; }
+    .purple .positioning-num { background: #e7d7ff; color: #7c3aed; border: 1px solid #7c3aed; }
+    .green .positioning-num { background: #d8f7df; color: #22c55e; border: 1px solid #22c55e; }
+    .positioning-card h3 { font-size: 1.05rem; line-height: 1.2; font-weight: 900; margin-bottom: 4px; }
+    .positioning-card .product { color: #52637a; font-size: 0.8rem; font-weight: 700; margin: 0; }
+    .positioning-icon { font-size: 1.4rem; margin-right: 6px; }
+    .positioning-points { list-style: none; padding: 0; margin: 0; }
+    .positioning-points li { margin-bottom: 12px; padding-left: 18px; position: relative; }
+    .positioning-points li:last-child { margin-bottom: 0; }
+    .positioning-points li::before { content: ''; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; }
+    .blue .positioning-points li::before { background: #4488e8; }
+    .purple .positioning-points li::before { background: #7c3aed; }
+    .green .positioning-points li::before { background: #22c55e; }
+    .positioning-points strong { display: block; color: #172033; font-size: 0.88rem; margin-bottom: 4px; }
+    .positioning-points span { display: block; color: #52637a; font-size: 0.78rem; line-height: 1.4; }
+    .positioning-footer { margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); background: #181b55; color: #fff; border-radius: 8px; overflow: hidden; font-weight: 800; font-size: 0.82rem; }
+    .positioning-footer div { text-align: center; padding: 12px 10px; border-right: 1px solid rgba(255,255,255,0.22); }
+    .positioning-footer div:last-child { border-right: 0; }
 
     /* ===== Closing ===== */
-    .closing-slide {
-      text-align: center;
-    }
+    .closing-inner { align-items: center; text-align: center; }
+    .closing-inner h2 { font-size: 2.4rem; margin-bottom: 10px; background: linear-gradient(135deg, var(--green) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .closing-inner .tagline { font-size: 1.1rem; color: var(--muted); margin-bottom: 28px; }
+    .takeaways { display: inline-block; text-align: left; list-style: none; padding: 0; }
+    .takeaways li { padding: 8px 0 8px 22px; font-size: 1rem; color: var(--text); position: relative; }
+    .takeaways li::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px rgba(26,127,55,0.4); }
+    .footer-text { margin-top: 32px; font-size: 0.85rem; color: var(--muted); }
 
-    .closing-slide h2 {
-      font-size: 2.8rem;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, var(--green) 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .reveal .progress { color: var(--accent); }
+    .reveal .controls { color: var(--accent); }
 
-    .closing-slide .tagline {
-      font-size: 1.2rem;
-      color: var(--muted);
-      margin-bottom: 40px;
-    }
-
-    .takeaways {
-      display: inline-block;
-      text-align: left;
-    }
-
-    .takeaways li {
-      padding: 10px 0 10px 20px;
-      font-size: 1.05rem;
-      color: var(--text);
-      position: relative;
-      list-style: none;
-    }
-
-    .takeaways li::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 50%;
-      transform: translateY(-50%);
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px rgba(26,127,55,0.4);
-    }
-
-    .footer-text {
-      margin-top: 48px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    /* ===== Navigation ===== */
-    .nav-dots {
-      position: fixed;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 100;
-    }
-
-    .nav-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--border);
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .nav-dot:hover, .nav-dot.active {
-      background: var(--accent);
-      transform: scale(1.3);
-      box-shadow: 0 0 6px rgba(9,105,218,0.3);
-    }
-
-    /* ===== Keyboard hint ===== */
-    .key-hint {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.8rem;
-      color: var(--muted);
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .slide { padding: 40px 20px; }
-      .title-slide h1 { font-size: 2.2rem; }
-      .slide-content h2 { font-size: 1.8rem; }
-      .cards-grid { grid-template-columns: 1fr; }
-      .stats-row { grid-template-columns: 1fr; }
-      .two-col { grid-template-columns: 1fr; }
-      .stat-number { font-size: 3rem; }
-      .nav-dots { display: none; }
-      .positioning-title { font-size: 2rem; }
-      .positioning-grid { grid-template-columns: 1fr; }
-      .positioning-card { min-height: auto; }
-      .positioning-footer { grid-template-columns: 1fr; }
-      .positioning-footer div { border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.22); }
-      .positioning-footer div:last-child { border-bottom: 0; }
-    }
+    /* Override reveal default list bullets */
+    .reveal .slides ul.positioning-points,
+    .reveal .slides ul.feature-list,
+    .reveal .slides ul.takeaways { list-style: none; }
+    .reveal .slides ul.positioning-points li,
+    .reveal .slides ul.feature-list li,
+    .reveal .slides ul.takeaways li { list-style: none; }
   </style>
 </head>
 <body>
+<div class="reveal">
+  <div class="slides">
 
-<!-- Navigation Dots -->
-<nav class="nav-dots" id="navDots"></nav>
-<div class="key-hint">↓ 滚动或按方向键翻页</div>
+    <!-- SLIDE 1: Title -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner title-inner">
+        <svg class="github-logo" viewBox="0 0 24 24" fill="#1f2328"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        <h1>GitHub @ Microsoft Build 2026</h1>
+        <p class="subtitle">核心发布亮点总览</p>
+        <p class="date">2026年6月2日 · 旧金山</p>
+      </div>
+    </section>
 
-<!-- SLIDE 1: Title -->
-<section class="slide title-slide" id="slide-1">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <div class="slide-content" style="position:relative; z-index:1;">
-    <svg class="github-logo" viewBox="0 0 24 24" fill="#1f2328"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-    <h1>GitHub @ Microsoft Build 2026</h1>
-    <p class="subtitle">核心发布亮点总览</p>
-    <p class="date">2026年6月2日 · 旧金山</p>
-  </div>
-</section>
+    <!-- SLIDE 2: Positioning -->
+    <section data-background-color="#eef3ff" class="positioning-slide">
+      <div class="slide-inner">
+        <h2 class="positioning-title"><span>GitHub Copilot:</span> 开发者 + 新的定位</h2>
+        <p class="positioning-subtitle">从 IDE 插件到 SDK 集成，灵活选择最适合团队的 AI 编程接入路径</p>
+        <div class="positioning-rule"></div>
+        <div class="positioning-grid">
+          <article class="positioning-card blue">
+            <div class="positioning-card-head">
+              <div class="positioning-num">01</div>
+              <div><h3><span class="positioning-icon">💻</span>代码驱动开发</h3><p class="product">GitHub Copilot</p></div>
+            </div>
+            <ul class="positioning-points">
+              <li><strong>覆盖主流 IDE</strong><span>VS Code · JetBrains · Xcode · Neovim</span></li>
+              <li><strong>第三方 Agent 支持</strong><span>接入 Claude Agent · Codex Agent</span></li>
+              <li><strong>Agent + Skill</strong><span>Agentic 编码，支持 Skill / MCP</span></li>
+              <li><strong>Copilot CLI / OpenCode 命令行</strong><span>在终端内辅助编码，开箱即用</span></li>
+            </ul>
+          </article>
+          <article class="positioning-card purple">
+            <div class="positioning-card-head">
+              <div class="positioning-num">02</div>
+              <div><h3><span class="positioning-icon">🌐</span>Agent 驱动开发</h3><p class="product">GitHub Copilot App</p></div>
+            </div>
+            <ul class="positioning-points">
+              <li><strong>专门设计的轻量级 Agent App</strong><span>面向业务人员设计的 Agent 工作台</span></li>
+              <li><strong>轻量终端工作流</strong><span>设置工作流，自动化工作负载</span></li>
+              <li><strong>GitHub 多模型支持和集成</strong><span>直接使用 GitHub Copilot 后端模型</span></li>
+              <li><strong>开源可扩展</strong><span>开源项目、社区驱动，可自定义 Agent 行为和工具集成</span></li>
+            </ul>
+          </article>
+          <article class="positioning-card green">
+            <div class="positioning-card-head">
+              <div class="positioning-num">03</div>
+              <div><h3><span class="positioning-icon">🔧</span>流程中的智能体</h3><p class="product">GitHub Copilot SDK</p></div>
+            </div>
+            <ul class="positioning-points">
+              <li><strong>集成现有平台</strong><span>嵌入自研 IDE、DevOps 平台或内部工具链</span></li>
+              <li><strong>流程自动化</strong><span>代码生成、审查、测试等流程自动化</span></li>
+              <li><strong>企业级业务场景扩展</strong><span>通用 Agent 场景，如微软 Clawpilot</span></li>
+              <li><strong>API 级别控制</strong><span>模型选择、上下文注入、权限控制、会话管理</span></li>
+            </ul>
+          </article>
+        </div>
+        <div class="positioning-footer">
+          <div>💻 IDE 原生集成 · 开箱即用</div>
+          <div>🌐 OpenCode · GitHub 登录 · 终端优先</div>
+          <div>🔧 SDK 集成 · 嵌入平台 · 流程自动化</div>
+        </div>
+      </div>
+    </section>
 
-<!-- SLIDE 2: Copilot Positioning -->
-<section class="slide positioning-slide" id="slide-positioning">
-  <div class="slide-content positioning-wrap">
-    <h2 class="positioning-title"><span class="brand">GitHub Copilot:</span> 开发者 + 新的定位</h2>
-    <p class="positioning-subtitle">从 IDE 插件到 SDK 集成，灵活选择最适合团队的 AI 编程接入路径</p>
-    <div class="positioning-rule"></div>
+    <!-- SLIDE 3: Copilot App -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">01 · NEW PRODUCT</div>
+        <h2>GitHub Copilot App</h2>
+        <p class="slide-subtitle">Agent-Native 桌面体验（技术预览）— 面向所有付费用户开放</p>
+        <div class="cards-grid">
+          <div class="card accent-green"><span class="badge badge-preview">技术预览</span><h3>多会话并行编排</h3><p>使用 git worktrees 隔离，可同时运行多个 agent 会话，互不干扰</p></div>
+          <div class="card accent-blue"><span class="badge badge-new">全新</span><h3>Canvases 画布</h3><p>Agent 与人类共享的可视化协作工作界面，实时同步进展</p></div>
+          <div class="card accent-purple"><span class="badge badge-new">全新</span><h3>Agent Merge</h3><p>从 PR 创建到代码合并的全流程自动化处理</p></div>
+          <div class="card accent-orange"><span class="badge badge-ga">GA</span><h3>语音对话 & 任务调度</h3><p>自然语言语音交互 + Prompt Scheduling 自动化任务编排</p></div>
+          <div class="card accent-blue"><span class="badge badge-preview">预览</span><h3>Cloud Sessions</h3><p>本地会话可随处继续，跨设备无缝切换工作上下文</p></div>
+        </div>
+        <div class="highlight-box">支持平台：Windows · macOS · Linux</div>
+      </div>
+    </section>
 
-    <div class="positioning-grid">
-      <article class="positioning-card blue">
-        <div class="positioning-card-head">
-          <div class="positioning-num">01</div>
+    <!-- SLIDE 4: Agentic -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">02 · AGENTIC</div>
+        <h2>Agentic 能力全面升级</h2>
+        <p class="slide-subtitle">从代码补全助手迈向自主执行的智能 Agent</p>
+        <div class="cards-grid">
+          <div class="card accent-blue"><span class="badge badge-preview">公开预览</span><h3>Cloud &amp; Local Sandboxes</h3><p>Copilot 可在安全隔离的沙箱中运行，支持本地和云端双模式</p></div>
+          <div class="card accent-green"><span class="badge badge-new">安全</span><h3>MXC 进程隔离</h3><p>CLI 采用 MXC 沙箱约束动态生成代码的执行范围，防止越权操作</p></div>
+          <div class="card accent-purple"><span class="badge badge-new">全新</span><h3>/chronicle — 记忆与上下文持久化</h3><p>Agent 可跨会话记住项目上下文、决策历史和代码架构，持续积累对代码库的深度理解</p></div>
+          <div class="card accent-blue"><span class="badge badge-preview">预览</span><h3>/fleet — 多 Agent 协同编排</h3><p>同时调度多个 Agent 并行处理不同任务，协调依赖关系，大幅提升复杂项目的交付效率</p></div>
+          <div class="card accent-orange"><span class="badge badge-new">智能</span><h3>AI 辅助合并冲突解决</h3><p>智能分析冲突上下文，减少手动处理合并冲突的工作量</p></div>
+          <div class="card accent-green"><span class="badge badge-ga">自动化</span><h3>Self-Review 自审查</h3><p>Agent 提交 PR 前自动对自身代码进行审查并修复发现的问题</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Code Review -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">03 · CODE REVIEW</div>
+        <h2>Code Review 重大更新</h2>
+        <p class="slide-subtitle">统一 Agent 平台架构，审查 → 修复 → 合并闭环</p>
+        <div class="cards-grid one">
+          <div class="card accent-purple"><span class="badge badge-preview">公开预览</span><h3>Agent Skills + MCP 支持</h3><p>将组织级上下文（工具链、编码标准、MCP 协议）引入每次代码审查，实现更精准、更贴合团队规范的反馈</p></div>
+          <div class="card accent-blue"><span class="badge badge-new">新增</span><h3>Medium Analysis Tier</h3><p>复杂 PR 自动路由到更高推理能力模型进行深度分析，简单变更使用快速模型，实现成本与质量的最优平衡</p></div>
+          <div class="card accent-orange"><span class="badge badge-exp">技术预览</span><h3>Copilot Code Review for Azure Repos</h3><p>直接在 Azure DevOps 的 Pull Request 中请求 Copilot 代码审查，无需切换到 GitHub 平台</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CLI & IDE -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">04 · DEVELOPER EXPERIENCE</div>
+        <h2>CLI &amp; IDE 体验</h2>
+        <p class="slide-subtitle">Copilot CLI 成为跨所有 IDE 的统一 Agent 入口</p>
+        <div class="two-col">
           <div>
-            <h3><span class="positioning-icon">💻</span>代码驱动开发</h3>
-            <p class="product">GitHub Copilot</p>
+            <div class="col-header orange">Copilot CLI 大版本刷新</div>
+            <ul class="feature-list">
+              <li><strong>Rubber Duck 橡皮鸭调试</strong> → 正式 GA</li>
+              <li><strong>Prompt Scheduling</strong> → 正式 GA</li>
+              <li><strong>Voice Input 语音输入</strong> → 正式 GA</li>
+              <li><strong>实验性终端界面</strong> — Issues / PR / Gists 标签页</li>
+              <li>通过 <code>/experimental</code> 命令即可体验</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-header blue">IDE &amp; 终端集成</div>
+            <ul class="feature-list">
+              <li><strong>JetBrains IDEs</strong> — Copilot CLI + Agent Picker + Slash Commands</li>
+              <li><strong>Eclipse</strong> — BYOK / Skills / Chat 全面升级</li>
+              <li><strong>Intelligent Terminal 0.1</strong>（实验性开源 fork）</li>
+              <li><strong>Windows Terminal</strong> 原生 Agent 集成 + 错误自动检测</li>
+              <li>Copilot CLI 作为 <strong>默认 Agent 体验</strong></li>
+            </ul>
           </div>
         </div>
-        <ul class="positioning-points">
-          <li>
-            <strong>覆盖主流 IDE</strong>
-            <span>VS Code · JetBrains · Xcode · Neovim</span>
-          </li>
-          <li>
-            <strong>第三方 Agent 支持</strong>
-            <span>接入 Claude Agent · Codex Agent</span>
-          </li>
-          <li>
-            <strong>Agent + Skill</strong>
-            <span>Agentic 编码，支持 Skill / MCP</span>
-          </li>
-          <li>
-            <strong>Copilot CLI / OpenCode 命令行</strong>
-            <span>在终端内辅助编码，开箱即用</span>
-          </li>
-        </ul>
-      </article>
+        <div class="highlight-box">🎯 亮点：Copilot CLI 正式成为跨所有 IDE 平台的统一 Agentic 体验入口</div>
+      </div>
+    </section>
 
-      <article class="positioning-card purple">
-        <div class="positioning-card-head">
-          <div class="positioning-num">02</div>
-          <div>
-            <h3><span class="positioning-icon">🌐</span>Agent 驱动开发</h3>
-            <p class="product">GitHub Copilot App</p>
-          </div>
+    <!-- SLIDE 7: Models & Platform -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">05 · MODELS & PLATFORM</div>
+        <h2>模型 & 平台</h2>
+        <p class="slide-subtitle">多模型生态 + 统一 SDK 平台架构</p>
+        <div class="cards-grid two">
+          <div class="card accent-green"><span class="badge badge-new">新模型</span><h3>MAI-Code-1-Flash</h3><p>微软自研代码模型，在 Copilot 模型选择器中直接可用，针对代码任务优化</p></div>
+          <div class="card accent-blue"><span class="badge badge-ga">扩展</span><h3>Gemini 3.1 Pro / 3.5 Flash</h3><p>Google 模型扩展支持到 CLI、Cloud Agent、Copilot App、SDK 全链路</p></div>
+          <div class="card accent-orange"><span class="badge badge-exp">方向</span><h3>BYOK / BYOM</h3><p>团队可使用符合性能、成本和合规要求的本地或云端模型</p></div>
+          <div class="card accent-purple"><span class="badge badge-preview">平台</span><h3>Copilot SDK 统一平台</h3><p>所有 Copilot 表面基于同一 SDK 构建，加速功能交付和生态集成</p></div>
         </div>
-        <ul class="positioning-points">
-          <li>
-            <strong>专门设计的轻量级 Agent App</strong>
-            <span>面向业务人员设计的 Agent 工作台</span>
-          </li>
-          <li>
-            <strong>轻量终端工作流</strong>
-            <span>设置工作流，自动化工作负载</span>
-          </li>
-          <li>
-            <strong>GitHub 多模型支持和集成</strong>
-            <span>直接使用 GitHub Copilot 后端模型</span>
-          </li>
-          <li>
-            <strong>开源可扩展</strong>
-            <span>开源项目、社区驱动，可自定义 Agent 行为和工具集成</span>
-          </li>
-        </ul>
-      </article>
+      </div>
+    </section>
 
-      <article class="positioning-card green">
-        <div class="positioning-card-head">
-          <div class="positioning-num">03</div>
-          <div>
-            <h3><span class="positioning-icon">🔧</span>流程中的智能体</h3>
-            <p class="product">GitHub Copilot SDK</p>
-          </div>
+    <!-- SLIDE 8: Key Metrics -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">06 · KEY METRICS</div>
+        <h2>关键数据</h2>
+        <p class="slide-subtitle">Agentic 工作流正在重塑 GitHub 平台规模</p>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-number green">14亿+</div><div class="stat-label">每月 Commits</div><p class="stat-desc">同比翻倍增长，Agent 驱动的自动化提交激增</p></div>
+          <div class="stat-card"><div class="stat-number blue">20亿+</div><div class="stat-label">每周 Actions 分钟数</div><p class="stat-desc">CI/CD 与 Agentic 工作流共同驱动</p></div>
         </div>
-        <ul class="positioning-points">
-          <li>
-            <strong>集成现有平台</strong>
-            <span>嵌入自研 IDE、DevOps 平台或内部工具链</span>
-          </li>
-          <li>
-            <strong>流程自动化</strong>
-            <span>代码生成、审查、测试等流程自动化</span>
-          </li>
-          <li>
-            <strong>企业级业务场景扩展</strong>
-            <span>通用 Agent 场景，如微软 Clawpilot</span>
-          </li>
-          <li>
-            <strong>API 级别控制</strong>
-            <span>模型选择、上下文注入、权限控制、会话管理</span>
-          </li>
+        <div class="highlight-box">从 prompt 到 plan，从 issue 到 merged PR — Agent 驱动的开发正在重塑整个软件交付流程</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Closing -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner closing-inner">
+        <div style="font-size:3rem; margin-bottom:18px;">🚀</div>
+        <h2>从助手到自主 Agent</h2>
+        <p class="tagline">GitHub Copilot 正在重新定义开发者工作流</p>
+        <ul class="takeaways">
+          <li>桌面 App 成为 Agent 编排中心</li>
+          <li>安全沙箱让 Agent 执行更可信</li>
+          <li>Code Review 闭环：审查 → 修复 → 合并</li>
+          <li>多模型生态满足不同场景需求</li>
+          <li>CLI 统一入口，全平台 Agent 体验一致</li>
         </ul>
-      </article>
-    </div>
+        <p class="footer-text">github.blog · Microsoft Build 2026 · 旧金山</p>
+      </div>
+    </section>
 
-    <div class="positioning-footer">
-      <div>💻 IDE 原生集成 · 开箱即用</div>
-      <div>🌐 OpenCode · GitHub 登录 · 终端优先</div>
-      <div>🔧 SDK 集成 · 嵌入平台 · 流程自动化</div>
-    </div>
   </div>
-</section>
+</div>
 
-<!-- SLIDE 2: Copilot App -->
-<section class="slide" id="slide-2">
-  <div class="slide-content">
-    <div class="section-num">01 · NEW PRODUCT</div>
-    <h2>GitHub Copilot App</h2>
-    <p class="slide-subtitle">Agent-Native 桌面体验（技术预览）— 面向所有付费用户开放</p>
-    <div class="cards-grid">
-      <div class="card accent-green">
-        <span class="badge badge-preview">技术预览</span>
-        <h3>多会话并行编排</h3>
-        <p>使用 git worktrees 隔离，可同时运行多个 agent 会话，互不干扰</p>
-      </div>
-      <div class="card accent-blue">
-        <span class="badge badge-new">全新</span>
-        <h3>Canvases 画布</h3>
-        <p>Agent 与人类共享的可视化协作工作界面，实时同步进展</p>
-      </div>
-      <div class="card accent-purple">
-        <span class="badge badge-new">全新</span>
-        <h3>Agent Merge</h3>
-        <p>从 PR 创建到代码合并的全流程自动化处理</p>
-      </div>
-      <div class="card accent-orange">
-        <span class="badge badge-ga">GA</span>
-        <h3>语音对话 & 任务调度</h3>
-        <p>自然语言语音交互 + Prompt Scheduling 自动化任务编排</p>
-      </div>
-      <div class="card accent-blue">
-        <span class="badge badge-preview">预览</span>
-        <h3>Cloud Sessions</h3>
-        <p>本地会话可随处继续，跨设备无缝切换工作上下文</p>
-      </div>
-    </div>
-    <div class="highlight-box">支持平台：Windows · macOS · Linux</div>
-  </div>
-</section>
-
-<!-- SLIDE 3: Agentic Capabilities -->
-<section class="slide" id="slide-3">
-  <div class="slide-content">
-    <div class="section-num">02 · AGENTIC</div>
-    <h2>Agentic 能力全面升级</h2>
-    <p class="slide-subtitle">从代码补全助手迈向自主执行的智能 Agent</p>
-    <div class="cards-grid">
-      <div class="card accent-blue">
-        <span class="badge badge-preview">公开预览</span>
-        <h3>Cloud & Local Sandboxes</h3>
-        <p>Copilot 可在安全隔离的沙箱中运行，支持本地和云端双模式</p>
-      </div>
-      <div class="card accent-green">
-        <span class="badge badge-new">安全</span>
-        <h3>MXC 进程隔离</h3>
-        <p>CLI 采用 MXC 沙箱约束动态生成代码的执行范围，防止越权操作</p>
-      </div>
-      <div class="card accent-purple">
-        <span class="badge badge-new">全新</span>
-        <h3>/chronicle — 记忆与上下文持久化</h3>
-        <p>Agent 可跨会话记住项目上下文、决策历史和代码架构，持续积累对代码库的深度理解</p>
-      </div>
-      <div class="card accent-blue">
-        <span class="badge badge-preview">预览</span>
-        <h3>/fleet — 多 Agent 协同编排</h3>
-        <p>同时调度多个 Agent 并行处理不同任务，协调依赖关系，大幅提升复杂项目的交付效率</p>
-      </div>
-      <div class="card accent-orange">
-        <span class="badge badge-new">智能</span>
-        <h3>AI 辅助合并冲突解决</h3>
-        <p>智能分析冲突上下文，减少手动处理合并冲突的工作量</p>
-      </div>
-      <div class="card accent-green">
-        <span class="badge badge-ga">自动化</span>
-        <h3>Self-Review 自审查</h3>
-        <p>Agent 提交 PR 前自动对自身代码进行审查并修复发现的问题</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 4: Code Review -->
-<section class="slide" id="slide-4">
-  <div class="slide-content">
-    <div class="section-num">03 · CODE REVIEW</div>
-    <h2>Code Review 重大更新</h2>
-    <p class="slide-subtitle">统一 Agent 平台架构，审查 → 修复 → 合并闭环</p>
-    <div class="cards-grid" style="grid-template-columns: 1fr;">
-      <div class="card accent-purple">
-        <span class="badge badge-preview">公开预览</span>
-        <h3>Agent Skills + MCP 支持</h3>
-        <p>将组织级上下文（工具链、编码标准、MCP 协议）引入每次代码审查，实现更精准、更贴合团队规范的反馈</p>
-      </div>
-      <div class="card accent-blue">
-        <span class="badge badge-new">新增</span>
-        <h3>Medium Analysis Tier</h3>
-        <p>复杂 PR 自动路由到更高推理能力模型进行深度分析，简单变更使用快速模型，实现成本与质量的最优平衡</p>
-      </div>
-      <div class="card accent-orange">
-        <span class="badge badge-exp">技术预览</span>
-        <h3>Copilot Code Review for Azure Repos</h3>
-        <p>直接在 Azure DevOps 的 Pull Request 中请求 Copilot 代码审查，无需切换到 GitHub 平台</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 5: CLI & IDE -->
-<section class="slide" id="slide-5">
-  <div class="slide-content">
-    <div class="section-num">04 · DEVELOPER EXPERIENCE</div>
-    <h2>CLI & IDE 体验</h2>
-    <p class="slide-subtitle">Copilot CLI 成为跨所有 IDE 的统一 Agent 入口</p>
-    <div class="two-col">
-      <div>
-        <div class="col-header orange">Copilot CLI 大版本刷新</div>
-        <ul class="feature-list">
-          <li><strong>Rubber Duck 橡皮鸭调试</strong> → 正式 GA</li>
-          <li><strong>Prompt Scheduling</strong> → 正式 GA</li>
-          <li><strong>Voice Input 语音输入</strong> → 正式 GA</li>
-          <li><strong>实验性终端界面</strong> — Issues / PR / Gists 标签页</li>
-          <li>通过 <code>/experimental</code> 命令即可体验</li>
-        </ul>
-      </div>
-      <div>
-        <div class="col-header blue">IDE & 终端集成</div>
-        <ul class="feature-list">
-          <li><strong>JetBrains IDEs</strong> — Copilot CLI + Agent Picker + Slash Commands</li>
-          <li><strong>Eclipse</strong> — BYOK / Skills / Chat 全面升级</li>
-          <li><strong>Intelligent Terminal 0.1</strong>（实验性开源 fork）</li>
-          <li><strong>Windows Terminal</strong> 原生 Agent 集成 + 错误自动检测</li>
-          <li>Copilot CLI 作为 <strong>默认 Agent 体验</strong></li>
-        </ul>
-      </div>
-    </div>
-    <div class="highlight-box">🎯 亮点：Copilot CLI 正式成为跨所有 IDE 平台的统一 Agentic 体验入口</div>
-  </div>
-</section>
-
-<!-- SLIDE 6: Models & Platform -->
-<section class="slide" id="slide-6">
-  <div class="slide-content">
-    <div class="section-num">05 · MODELS & PLATFORM</div>
-    <h2>模型 & 平台</h2>
-    <p class="slide-subtitle">多模型生态 + 统一 SDK 平台架构</p>
-    <div class="cards-grid" style="grid-template-columns: 1fr 1fr;">
-      <div class="card accent-green">
-        <span class="badge badge-new">新模型</span>
-        <h3>MAI-Code-1-Flash</h3>
-        <p>微软自研代码模型，在 Copilot 模型选择器中直接可用，针对代码任务优化</p>
-      </div>
-      <div class="card accent-blue">
-        <span class="badge badge-ga">扩展</span>
-        <h3>Gemini 3.1 Pro / 3.5 Flash</h3>
-        <p>Google 模型扩展支持到 CLI、Cloud Agent、Copilot App、SDK 全链路</p>
-      </div>
-      <div class="card accent-orange">
-        <span class="badge badge-exp">方向</span>
-        <h3>BYOK / BYOM</h3>
-        <p>团队可使用符合性能、成本和合规要求的本地或云端模型</p>
-      </div>
-      <div class="card accent-purple">
-        <span class="badge badge-preview">平台</span>
-        <h3>Copilot SDK 统一平台</h3>
-        <p>所有 Copilot 表面基于同一 SDK 构建，加速功能交付和生态集成</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 7: Key Metrics -->
-<section class="slide" id="slide-7">
-  <div class="slide-content">
-    <div class="section-num">06 · KEY METRICS</div>
-    <h2>关键数据</h2>
-    <p class="slide-subtitle">Agentic 工作流正在重塑 GitHub 平台规模</p>
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-number green">14亿+</div>
-        <div class="stat-label">每月 Commits</div>
-        <div class="stat-desc">同比翻倍增长，Agent 驱动的自动化提交激增</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number blue">20亿+</div>
-        <div class="stat-label">每周 Actions 分钟数</div>
-        <div class="stat-desc">CI/CD 与 Agentic 工作流共同驱动</div>
-      </div>
-    </div>
-    <div class="highlight-box" style="margin-top:36px;">
-      从 prompt 到 plan，从 issue 到 merged PR — Agent 驱动的开发正在重塑整个软件交付流程
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 8: Closing -->
-<section class="slide closing-slide" id="slide-8">
-  <div class="orb orb-1" style="width:300px;height:300px;background:var(--green);top:-50px;right:-50px;"></div>
-  <div class="orb orb-2" style="width:350px;height:350px;background:var(--accent);bottom:-80px;left:-80px;"></div>
-  <div class="slide-content" style="position:relative; z-index:1;">
-    <div style="font-size:3rem; margin-bottom:20px;">🚀</div>
-    <h2>从助手到自主 Agent</h2>
-    <p class="tagline">GitHub Copilot 正在重新定义开发者工作流</p>
-    <ul class="takeaways">
-      <li>桌面 App 成为 Agent 编排中心</li>
-      <li>安全沙箱让 Agent 执行更可信</li>
-      <li>Code Review 闭环：审查 → 修复 → 合并</li>
-      <li>多模型生态满足不同场景需求</li>
-      <li>CLI 统一入口，全平台 Agent 体验一致</li>
-    </ul>
-    <p class="footer-text">github.blog · Microsoft Build 2026 · 旧金山</p>
-  </div>
-</section>
-
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
-  // Create nav dots
-  const slides = document.querySelectorAll('.slide');
-  const navDots = document.getElementById('navDots');
-
-  slides.forEach((slide, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'nav-dot';
-    dot.addEventListener('click', () => slide.scrollIntoView({ behavior: 'smooth' }));
-    navDots.appendChild(dot);
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 1.5,
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    controls: true,
+    progress: true,
+    center: false
   });
-
-  // Update active dot on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const idx = [...slides].indexOf(entry.target);
-        document.querySelectorAll('.nav-dot').forEach((d, i) => {
-          d.classList.toggle('active', i === idx);
-        });
-      }
-    });
-  }, { threshold: 0.5 });
-
-  slides.forEach(s => observer.observe(s));
-
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    const current = [...slides].findIndex(s => {
-      const rect = s.getBoundingClientRect();
-      return rect.top >= -100 && rect.top < window.innerHeight / 2;
-    });
-
-    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
-      e.preventDefault();
-      if (current < slides.length - 1) slides[current + 1].scrollIntoView({ behavior: 'smooth' });
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      e.preventDefault();
-      if (current > 0) slides[current - 1].scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-
-  // Fade-in animation on scroll
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelector('.slide-content').style.animation = 'fadeUp 0.6s ease-out both';
-      }
-    });
-  }, { threshold: 0.3 });
-
-  slides.forEach(s => fadeObserver.observe(s));
 </script>
-
 </body>
 </html>
