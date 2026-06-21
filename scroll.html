@@ -933,6 +933,48 @@
   </div>
 </section>
 
+<!-- SLIDE: Token Efficiency -->
+<section class="slide" id="slide-token">
+  <div class="slide-content">
+    <div class="section-num">07 · TOKEN EFFICIENCY</div>
+    <h2>Token 效率优化技术</h2>
+    <p class="slide-subtitle">Harness 层优化 · 缓存复用 · 工具按需加载 · 传输加速 · 智能模型路由</p>
+    <div class="cards-grid">
+      <div class="card accent-blue">
+        <span class="badge badge-preview">缓存</span>
+        <h3>Prompt 缓存复用</h3>
+        <p>复用 prefix 模型状态，缓存命中最高便宜 10×；OpenAI 延长缓存保留至 24 小时</p>
+      </div>
+      <div class="card accent-green">
+        <span class="badge badge-ga">~94% 命中</span>
+        <h3>精明缓存断点 (Anthropic)</h3>
+        <p>手动放置最多 4 个 cache_control 断点，Agentic 场景缓存命中率约 94%</p>
+      </div>
+      <div class="card accent-purple">
+        <span class="badge badge-new">-9~18%</span>
+        <h3>工具按需加载 Tool Search</h3>
+        <p>defer_loading 延迟加载工具定义而非全量预载，整体 token 降 9–18%</p>
+      </div>
+      <div class="card accent-orange">
+        <span class="badge badge-exp">语义检索</span>
+        <h3>客户端语义工具搜索</h3>
+        <p>用 Copilot embedding 向量按意图匹配工具，延迟更低，用户错误率降 4%</p>
+      </div>
+      <div class="card accent-blue">
+        <span class="badge badge-preview">TTFT -16~19%</span>
+        <h3>WebSockets 传输</h3>
+        <p>Responses API 长连接，TTFT 降 16–19%；GPT-5.2+ 已默认启用</p>
+      </div>
+      <div class="card accent-green">
+        <span class="badge badge-ga">最高省 72.5%</span>
+        <h3>Auto 智能模型路由</h3>
+        <p>HyDRA 任务感知 + 缓存感知路由，按任务选模型，最高省 72.5%，覆盖 16 语系</p>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:28px;">下一步方向：专用子代理 (Subagents) 将窄任务交给最便宜模型，主模型不再为辅助工作买单</div>
+  </div>
+</section>
+
 <!-- SLIDE 8: Closing -->
 <section class="slide closing-slide" id="slide-8">
   <div class="orb orb-1" style="width:300px;height:300px;background:var(--green);top:-50px;right:-50px;"></div>
