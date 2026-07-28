@@ -255,6 +255,87 @@
       </div>
     </section>
 
+    <!-- SLIDE 4a: Sandboxes Deep Dive -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">02 · DEEP DIVE</div>
+        <h2>Sandboxes 安全沙箱详解</h2>
+        <p class="slide-subtitle">隔离执行环境，让 Agentic 工作流安全可控（公开预览）</p>
+        <div class="two-col">
+          <div>
+            <div class="col-header blue">🖥️ 本地沙箱 Local Sandbox</div>
+            <ul class="feature-list">
+              <li>会话内 <code>/sandbox enable</code> 一键开启</li>
+              <li>限制 Copilot 对文件系统、网络、系统能力的访问</li>
+              <li>基于 <strong>Microsoft MXC</strong> 技术，macOS / Linux（Windows Insiders）</li>
+              <li>企业可通过 <strong>Intune / MDM</strong> 集中下发沙箱策略</li>
+              <li>包含在 Copilot 席位中，<strong>免费</strong></li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-header orange">☁️ 云端沙箱 Cloud Sandbox</div>
+            <ul class="feature-list">
+              <li><code>copilot --cloud</code> 启动 GitHub 托管的临时 Linux 环境</li>
+              <li>基于 <strong>Azure Container Apps Sandboxes</strong>，会话完全隔离</li>
+              <li>跨设备续接：Stopped 状态自动快照，随处恢复</li>
+              <li>并行卸载算力，不占本地资源；复用 Cloud Agent 策略</li>
+              <li>按量计费：Compute / Memory / 快照存储三项计量</li>
+            </ul>
+          </div>
+        </div>
+        <div class="highlight-box">🔐 复用现有 Copilot 认证，无需配置云厂商 · 生命周期：Active → Stopped（快照保留）→ Deleted</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4b: Chronicle Deep Dive -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">02 · DEEP DIVE</div>
+        <h2>/chronicle 会话记忆详解</h2>
+        <p class="slide-subtitle">可搜索的跨平台会话历史 — 让 Agent 记住你做过的一切</p>
+        <div class="cards-grid">
+          <div class="card accent-blue"><span class="badge badge-new">查询</span><h3>自然语言查询历史</h3><p>"我上周做了什么？"、"上次怎么处理认证的？" — Copilot 直接搜索过往会话作答</p></div>
+          <div class="card accent-green"><span class="badge badge-ga">恢复</span><h3>会话恢复 Resume</h3><p>在任意历史会话的中断处继续工作，文件与上下文完整还原</p></div>
+          <div class="card accent-purple"><span class="badge badge-new">洞察</span><h3>Standup / Tips / 成本分析</h3><p>专用子命令自动生成站会报告、个性化建议、Token 成本分析与自定义指令优化建议</p></div>
+          <div class="card accent-orange"><span class="badge badge-preview">架构</span><h3>本地 SQLite + 云同步</h3><p>会话记录于 ~/.copilot/session-state/ 与本地会话库，默认同步到 GitHub 账户</p></div>
+          <div class="card accent-blue"><span class="badge badge-ga">聚合</span><h3>跨平台会话聚合</h3><p>覆盖 CLI、VS Code、JetBrains、Copilot App、Cloud Agent、Code Review 全部会话</p></div>
+          <div class="card accent-green"><span class="badge badge-exp">隐私</span><h3>数据仅本人可见</h3><p>remoteExport 可关闭同步；/session delete/prune 管理删除；可选分享只读视图</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4c: /fleet Deep Dive -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">02 · DEEP DIVE</div>
+        <h2>/fleet 多 Agent 编排详解</h2>
+        <p class="slide-subtitle">编排器像项目负责人一样分工：分解 → 并行派发 → 验证汇总</p>
+        <div class="two-col">
+          <div>
+            <div class="col-header blue">⚙️ 工作原理（5 步）</div>
+            <ul class="feature-list">
+              <li><strong>分解任务</strong> — 拆为带依赖关系的独立工作项</li>
+              <li><strong>识别并行性</strong> — 无依赖项并行，有依赖项串行</li>
+              <li><strong>派发子 Agent</strong> — 各自独立上下文，共享文件系统</li>
+              <li><strong>轮询进度</strong> — 完成后派发下一波任务</li>
+              <li><strong>验证汇总</strong> — 校验输出并合成最终交付物</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-header orange">🎯 使用要点与注意</div>
+            <ul class="feature-list">
+              <li><strong>明确交付物</strong> — 每项对应具体文件，模糊 prompt 退化为串行</li>
+              <li><strong>声明依赖与边界</strong> — 指定目录归属、禁改范围、验证标准</li>
+              <li><strong>自定义 Agent</strong> — <code>.github/agents/</code> 定义专职 Agent，按任务配模型</li>
+              <li>⚠️ <strong>无文件锁</strong> — 多 Agent 写同一文件会静默覆盖，须分区</li>
+              <li>⚠️ <strong>上下文自包含</strong> — 子 Agent 看不到编排器会话历史</li>
+            </ul>
+          </div>
+        </div>
+        <div class="highlight-box">💡 适合多文件重构、批量文档、API+UI+测试并行；线性单文件任务不划算 · <code>/tasks</code> 查看运行中的子 Agent</div>
+      </div>
+    </section>
+
     <!-- SLIDE 5: Code Review -->
     <section data-background-color="#ffffff">
       <div class="slide-inner">
