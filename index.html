@@ -336,6 +336,38 @@
       </div>
     </section>
 
+    <!-- SLIDE 4d: Rubber Duck & Security Review Deep Dive -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">02 · DEEP DIVE</div>
+        <h2>Rubber Duck & Security Review Agent</h2>
+        <p class="slide-subtitle">质量与安全双守门员 — 跨模型评审 + 预提交漏洞扫描</p>
+        <div class="two-col">
+          <div>
+            <div class="col-header blue">🦆 Rubber Duck（GA）</div>
+            <ul class="feature-list">
+              <li><strong>跨模型评审</strong> — 刻意用不同模型家族做批评家（Claude 主会话 ↔ GPT 评审），规避同源盲区</li>
+              <li><strong>高杠杆时机自动咨询</strong> — 规划后实现前、复杂实现中途、写完测试后、反复失败时</li>
+              <li><strong>只报真问题</strong> — bug / 逻辑错误 / 设计缺陷 / 性能瓶颈，不评论风格与命名</li>
+              <li><strong>分级反馈</strong> — Blocking / Non-blocking / Suggestions，附具体修复建议</li>
+              <li><strong>只读权限</strong> — 不改文件，采纳与否由主 Agent 决定；<code>/rubber-duck</code> 可手动调用</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-header orange">🔒 Security Review（公开预览）</div>
+            <ul class="feature-list">
+              <li><strong>预提交扫描</strong> — <code>/security-review</code> 对本地 diff 做 LLM 上下文推理，代码进 PR/CI 前发现漏洞</li>
+              <li><strong>覆盖 11 类高危漏洞</strong> — SQLi / XSS / SSRF / 越权 / 弱加密 / 硬编码凭据 / 供应链 / XPIA 跨提示注入</li>
+              <li><strong>高置信度过滤</strong> — 每条附严重度 + 置信度 + 修复建议，降低误报噪音</li>
+              <li><strong>轻量补充</strong> — 独立于 code scanning / Dependabot / secret scanning，可配合 GitHub MCP 调用真实扫描</li>
+              <li><strong>多端可用</strong> — Copilot CLI（实验模式）与 Copilot App，全计划开放</li>
+            </ul>
+          </div>
+        </div>
+        <div class="highlight-box">🎯 组合拳：Rubber Duck 把关计划与实现质量 · Security Review 把关安全 — AI 写的代码由 AI 先自查</div>
+      </div>
+    </section>
+
     <!-- SLIDE 5: Code Review -->
     <section data-background-color="#ffffff">
       <div class="slide-inner">
