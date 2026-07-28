@@ -220,6 +220,38 @@
       </div>
     </section>
 
+    <!-- SLIDE 6b: Architecture Convergence -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">00 · ARCHITECTURE</div>
+        <h2>架构收敛：一个 Agent 内核，多个表面</h2>
+        <p class="slide-subtitle">Copilot SDK / CLI 成为统一运行时 — App、VS Code、JetBrains 均为其"显示与控制层"</p>
+        <div class="two-col">
+          <div>
+            <div class="col-header orange">🧠 统一运行时的官方证据</div>
+            <ul class="feature-list">
+              <li><strong>Copilot App</strong> — 构建于 CLI 之上：Business/Enterprise 须启用 CLI 策略；CLI 会话直接进入 My Work 视图</li>
+              <li><strong>VS Code Agent Host</strong> — Copilot harness 由 <strong>Copilot SDK</strong> 驱动，官方明确"行为与 CLI / App 对齐"</li>
+              <li><strong>JetBrains IDEs</strong> — 内嵌 Copilot CLI + Agent Picker + Slash Commands</li>
+              <li><strong>Windows Terminal</strong> — Copilot CLI 作为默认 Agent 体验</li>
+              <li><strong>Copilot SDK</strong> — 暴露的正是驱动 Cloud Agent 与 CLI 的同一套生产级 runtime</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-header blue">🔌 VS Code AHP 架构要点</div>
+            <ul class="feature-list">
+              <li><strong>Agent Host 独立进程</strong>承载会话，通过开放协议 <strong>AHP</strong>（JSON-RPC + 不可变状态/纯 reducer）与编辑器通信</li>
+              <li><strong>会话与窗口解耦</strong> — 关窗口任务照跑，多窗口可连同一会话实时同步</li>
+              <li><strong>远程执行</strong> — <code>code agent host</code> + SSH / dev tunnel，UI 在本地、执行在代码旁</li>
+              <li><strong>多 harness 插拔</strong> — Copilot / Claude / Codex 统一接入，均支持 worktree 隔离</li>
+              <li><strong>客户端贡献工具</strong> — 浏览器/扩展工具注册进会话，调用路由回贡献方</li>
+            </ul>
+          </div>
+        </div>
+        <div class="highlight-box">💡 一次发布，处处可用：功能做在 runtime 层（Rubber Duck / chronicle / 沙箱 / 语音），各表面只需接入 — <strong>AHP 之于 Agent，如同 LSP 之于语言服务器</strong></div>
+      </div>
+    </section>
+
     <!-- SLIDE 3: Copilot App -->
     <section data-background-color="#ffffff">
       <div class="slide-inner">
@@ -399,38 +431,6 @@
           </div>
         </div>
         <div class="highlight-box">🎯 亮点：Copilot CLI 正式成为跨所有 IDE 平台的统一 Agentic 体验入口</div>
-      </div>
-    </section>
-
-    <!-- SLIDE 6b: Architecture Convergence -->
-    <section data-background-color="#ffffff">
-      <div class="slide-inner">
-        <div class="section-num">03 · DEEP DIVE</div>
-        <h2>架构收敛：一个 Agent 内核，多个表面</h2>
-        <p class="slide-subtitle">Copilot SDK / CLI 成为统一运行时 — App、VS Code、JetBrains 均为其"显示与控制层"</p>
-        <div class="two-col">
-          <div>
-            <div class="col-header orange">🧠 统一运行时的官方证据</div>
-            <ul class="feature-list">
-              <li><strong>Copilot App</strong> — 构建于 CLI 之上：Business/Enterprise 须启用 CLI 策略；CLI 会话直接进入 My Work 视图</li>
-              <li><strong>VS Code Agent Host</strong> — Copilot harness 由 <strong>Copilot SDK</strong> 驱动，官方明确"行为与 CLI / App 对齐"</li>
-              <li><strong>JetBrains IDEs</strong> — 内嵌 Copilot CLI + Agent Picker + Slash Commands</li>
-              <li><strong>Windows Terminal</strong> — Copilot CLI 作为默认 Agent 体验</li>
-              <li><strong>Copilot SDK</strong> — 暴露的正是驱动 Cloud Agent 与 CLI 的同一套生产级 runtime</li>
-            </ul>
-          </div>
-          <div>
-            <div class="col-header blue">🔌 VS Code AHP 架构要点</div>
-            <ul class="feature-list">
-              <li><strong>Agent Host 独立进程</strong>承载会话，通过开放协议 <strong>AHP</strong>（JSON-RPC + 不可变状态/纯 reducer）与编辑器通信</li>
-              <li><strong>会话与窗口解耦</strong> — 关窗口任务照跑，多窗口可连同一会话实时同步</li>
-              <li><strong>远程执行</strong> — <code>code agent host</code> + SSH / dev tunnel，UI 在本地、执行在代码旁</li>
-              <li><strong>多 harness 插拔</strong> — Copilot / Claude / Codex 统一接入，均支持 worktree 隔离</li>
-              <li><strong>客户端贡献工具</strong> — 浏览器/扩展工具注册进会话，调用路由回贡献方</li>
-            </ul>
-          </div>
-        </div>
-        <div class="highlight-box">💡 一次发布，处处可用：功能做在 runtime 层（Rubber Duck / chronicle / 沙箱 / 语音），各表面只需接入 — <strong>AHP 之于 Agent，如同 LSP 之于语言服务器</strong></div>
       </div>
     </section>
 
