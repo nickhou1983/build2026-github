@@ -144,6 +144,10 @@ h2.sec .hl{ color:var(--green); }
 .grid{ display:grid; gap:22px; }
 .g3{ grid-template-columns:repeat(3,1fr); }
 .g2{ grid-template-columns:repeat(2,1fr); }
+.grid.dense{ gap:16px; }
+.grid.dense .card{ padding:20px 26px; }
+.grid.dense .card h3{ font-size:24px; margin-bottom:8px; }
+.grid.dense .card p{ font-size:19px; line-height:1.45; }
 .card{
     background:var(--panel); border:1px solid var(--border); border-radius:8px;
     padding:28px 30px; position:relative; overflow:hidden;
@@ -387,16 +391,19 @@ ul.fl li code{
     <div class="prompt rv rv1">$ <span class="cmd">copilot</span> <span class="arg">--capabilities agentic</span></div>
     <h2 class="sec rv rv1">Agentic 能力<span class="hl">全面升级</span></h2>
     <div class="tagline rv rv2">从代码补全助手迈向自主执行的智能 Agent</div>
-    <div class="grid g3">
+    <div class="grid g3 dense">
       <div class="card rv rv3"><h3>Cloud &amp; Local Sandboxes <span class="badge amber">公开预览</span></h3><p>Copilot 可在安全隔离的沙箱中运行，支持本地和云端双模式</p></div>
       <div class="card rv rv3"><h3>/agentfinder 智能发现 <span class="badge">全新</span></h3><p>根据任务上下文自动发现并匹配最合适的 Agent 与 Skill，无需手动检索</p></div>
       <div class="card rv rv4"><h3>/chronicle 记忆持久化 <span class="badge">全新</span></h3><p>跨会话记住项目上下文、决策历史和代码架构，持续积累代码库理解</p></div>
       <div class="card rv rv4"><h3>/fleet 多 Agent 编排 <span class="badge amber">预览</span></h3><p>同时调度多个 Agent 并行处理任务、协调依赖，大幅提升复杂项目交付效率</p></div>
       <div class="card rv rv5"><h3>AI 辅助合并冲突解决 <span class="badge blue">智能</span></h3><p>智能分析冲突上下文，减少手动处理合并冲突的工作量</p></div>
       <div class="card rv rv5"><h3>Self-Review 自审查 <span class="badge blue">自动化</span></h3><p>Agent 提交 PR 前自动对自身代码进行审查并修复发现的问题</p></div>
+      <div class="card rv rv6"><h3>Remote Control 远程接管 <span class="badge">GA</span></h3><p>本地 CLI / VS Code 会话可从 github.com 与 Mobile 查看进度、响应审批、随时接管</p></div>
+      <div class="card rv rv6"><h3>Autopilot 自主模式 <span class="badge blue">增强</span></h3><p>授权后 Agent 无需逐步确认，持续自主推进多步任务，更少人工干预</p></div>
+      <div class="card rv rv6"><h3>Agentic Harness 统一引擎 <span class="badge amber">基准公开</span></h3><p>一个 Harness 驱动 20+ 模型 + BYOK，解决率对标厂商官方 Harness 且更省 Token</p></div>
     </div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> 6 capabilities online</span><span>05 / 15</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> 9 capabilities online</span><span>05 / 15</span></div>
 </section>
 
 <!-- === SLIDE 5: DEEP DIVE — SANDBOXES === -->
