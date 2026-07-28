@@ -521,7 +521,24 @@
   </div>
 </div>
 
+<button id="fsBtn" title="全屏播放 (F)" style="position:fixed;top:16px;right:16px;z-index:1000;display:flex;align-items:center;gap:8px;padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#fff;background:rgba(35,134,54,.92);border:1px solid rgba(255,255,255,.25);border-radius:6px;cursor:pointer;transition:background .2s">⛶ 全屏播放</button>
+
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  const fsBtn = document.getElementById('fsBtn');
+  function toggleFS(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  }
+  fsBtn.addEventListener('click', toggleFS);
+  document.addEventListener('fullscreenchange', () => {
+    const on = !!document.fullscreenElement;
+    fsBtn.innerHTML = on ? '⛶ 退出全屏' : '⛶ 全屏播放';
+    fsBtn.style.opacity = on ? '0.35' : '1';
+  });
+  fsBtn.addEventListener('mouseenter', () => fsBtn.style.opacity = '1');
+  fsBtn.addEventListener('mouseleave', () => { if (document.fullscreenElement) fsBtn.style.opacity = '0.35'; });
+</script>
 <script>
   Reveal.initialize({
     width: 1280,
