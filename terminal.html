@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub @ Microsoft Build 2026 — 核心发布亮点 · Terminal Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   =========================================== */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+img, video, canvas, svg { max-width: 100%; max-height: 100%; }
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+@media print {
+    html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+    .deck-viewport { position: static; overflow: visible; background: #fff; }
+    .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+    .slide {
+        position: relative; display: block !important; visibility: visible !important;
+        opacity: 1 !important; pointer-events: auto !important;
+        width: 1920px; height: 1080px; break-after: page; page-break-after: always;
+    }
+    .slide:last-child { break-after: auto; page-break-after: auto; }
+    .deck-controls { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* === TERMINAL GREEN THEME === */
+:root{
+    --stage-bg:#010409;
+    --slide-bg:#0d1117;
+    --panel:#161b22;
+    --panel-2:#1c2129;
+    --border:#30363d;
+    --green:#39d353;
+    --green-mid:#26a641;
+    --green-dim:#006d32;
+    --green-deep:#0e4429;
+    --text:#e6edf3;
+    --muted:#8b949e;
+    --faint:#484f58;
+    --amber:#d29922;
+    --blue:#58a6ff;
+    --red:#ff5f56;
+    --mono:'JetBrains Mono',monospace;
+    --sans:'Noto Sans SC',sans-serif;
+}
+.slide{ font-family:var(--mono); color:var(--text); }
+/* scanline overlay on every slide */
+.slide::after{
+    content:''; position:absolute; inset:0; z-index:50; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 2px, transparent 2px 5px);
+}
+
+/* === TERMINAL WINDOW CHROME === */
+.tbar{
+    position:absolute; top:0; left:0; right:0; height:64px;
+    background:var(--panel); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:14px; padding:0 48px; z-index:5;
+}
+.tbar .dot{ width:15px; height:15px; border-radius:50%; }
+.tbar .d1{ background:#ff5f56 } .tbar .d2{ background:#ffbd2e } .tbar .d3{ background:#27c93f }
+.tbar .path{ margin-left:18px; font-size:20px; color:var(--muted); }
+.tbar .path b{ color:var(--green); font-weight:600; }
+.tbar .right{ margin-left:auto; font-size:18px; color:var(--faint); }
+.sbar{
+    position:absolute; bottom:0; left:0; right:0; height:52px;
+    background:var(--panel); border-top:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 48px; font-size:18px; color:var(--muted); z-index:5;
+}
+.sbar .ok{ color:var(--green); }
+
+/* === SLIDE BODY LAYOUT === */
+.body{ position:absolute; top:64px; bottom:52px; left:0; right:0; padding:52px 96px 40px; }
+.prompt{ font-size:26px; color:var(--green); margin-bottom:14px; }
+.prompt .cmd{ color:var(--text); }
+.prompt .arg{ color:var(--blue); }
+h2.sec{
+    font-family:var(--sans); font-weight:900; font-size:60px; line-height:1.15;
+    margin:0 0 10px; color:var(--text);
+}
+h2.sec .en{ font-family:var(--mono); font-weight:800; letter-spacing:-1px; }
+h2.sec .hl{ color:var(--green); }
+.tagline{ font-family:var(--sans); font-size:25px; color:var(--muted); margin-bottom:40px; }
+
+/* === CARD GRID === */
+.grid{ display:grid; gap:22px; }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.g2{ grid-template-columns:repeat(2,1fr); }
+.card{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:28px 30px; position:relative; overflow:hidden;
+}
+.card::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--green-mid);
+}
+.card h3{
+    font-family:var(--sans); font-weight:700; font-size:27px; margin:0 0 12px;
+    color:var(--text); display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+}
+.card p{ font-family:var(--sans); font-size:21px; line-height:1.55; color:var(--muted); margin:0; }
+.badge{
+    font-family:var(--mono); font-size:15px; font-weight:700; letter-spacing:.06em;
+    padding:3px 12px; border-radius:4px; border:1px solid var(--green-mid);
+    color:var(--green); background:rgba(57,211,83,.08); white-space:nowrap;
+}
+.badge.amber{ border-color:var(--amber); color:var(--amber); background:rgba(210,153,34,.08); }
+.badge.blue{ border-color:var(--blue); color:var(--blue); background:rgba(88,166,255,.08); }
+
+/* === TWO COLUMN PANELS === */
+.col{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:34px 38px;
+}
+.col .col-title{
+    font-family:var(--sans); font-weight:900; font-size:31px; margin:0 0 24px;
+    padding-bottom:16px; border-bottom:1px solid var(--border); color:var(--green);
+}
+.col.alt .col-title{ color:var(--blue); }
+ul.fl{ list-style:none; margin:0; padding:0; }
+ul.fl li{
+    font-family:var(--sans); font-size:21px; line-height:1.5; color:var(--muted);
+    padding:10px 0 10px 34px; position:relative;
+}
+ul.fl li::before{
+    content:'>'; position:absolute; left:0; top:10px;
+    font-family:var(--mono); color:var(--green); font-weight:700;
+}
+ul.fl li b{ color:var(--text); font-weight:700; }
+ul.fl li code{
+    font-family:var(--mono); font-size:19px; color:var(--green);
+    background:rgba(57,211,83,.08); padding:1px 8px; border-radius:4px;
+}
+.hint{
+    margin-top:30px; background:rgba(57,211,83,.06); border:1px dashed var(--green-dim);
+    border-radius:8px; padding:18px 26px; font-family:var(--sans);
+    font-size:21px; color:var(--muted);
+}
+.hint b{ color:var(--green); }
+
+/* === TITLE SLIDE === */
+.graph{
+    position:absolute; right:80px; top:150px; z-index:1;
+    display:grid; grid-template-columns:repeat(18,27px); grid-auto-rows:27px; gap:7px;
+}
+.graph i{ border-radius:5px; background:#161b22; animation:pop .5s both; }
+.graph i.l1{background:var(--green-deep)} .graph i.l2{background:var(--green-dim)}
+.graph i.l3{background:var(--green-mid)} .graph i.l4{background:var(--green)}
+@keyframes pop{ from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.hero{ position:absolute; left:96px; top:220px; width:1150px; z-index:2; }
+.hero .prompt{ font-size:30px; margin-bottom:34px; animation:fade .8s .2s both; }
+.hero h1{
+    font-family:var(--sans); font-weight:900; font-size:104px; line-height:1.12;
+    margin:0; animation:fade .8s .5s both;
+}
+.hero h1 .en{ font-family:var(--mono); font-weight:800; letter-spacing:-2px; }
+.hero h1 .hl{ color:var(--green); }
+.hero .sub{ margin-top:40px; font-family:var(--sans); font-size:30px; color:var(--muted); animation:fade .8s .8s both; }
+.hero .tags{ margin-top:56px; display:flex; gap:18px; animation:fade .8s 1.1s both; }
+.hero .tag{
+    border:1px solid var(--green-mid); color:var(--green); font-size:21px;
+    padding:11px 24px; border-radius:6px; background:rgba(57,211,83,.06);
+}
+.cursor{ display:inline-block; width:17px; height:32px; background:var(--green); vertical-align:-3px; animation:blink 1s steps(1) infinite; }
+@keyframes blink{ 50%{opacity:0} }
+@keyframes fade{ from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+.slide.active .rv{ animation:fade .6s both; }
+.slide.active .rv1{ animation-delay:.1s } .slide.active .rv2{ animation-delay:.22s }
+.slide.active .rv3{ animation-delay:.34s } .slide.active .rv4{ animation-delay:.46s }
+.slide.active .rv5{ animation-delay:.58s } .slide.active .rv6{ animation-delay:.7s }
+.slide.active .rv7{ animation-delay:.82s }
+
+/* === POSITIONING TRIAD (slide 2) === */
+.triad{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.triad .col{ padding:30px 34px; }
+.triad .num{ font-size:22px; color:var(--faint); font-weight:700; }
+.triad .icon{ font-size:44px; margin:10px 0 4px; }
+.triad h3{ font-family:var(--sans); font-weight:900; font-size:30px; margin:2px 0 4px; color:var(--text); }
+.triad .role{ font-family:var(--sans); font-size:20px; color:var(--green); margin-bottom:18px; }
+.triad ul.fl li{ font-size:20px; padding:8px 0 8px 30px; }
+.triad ul.fl li::before{ top:8px; }
+
+/* === METRICS === */
+.metrics{ display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:16px; }
+.metric{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:56px 50px; text-align:center;
+}
+.metric .val{ font-size:120px; font-weight:800; letter-spacing:-4px; color:var(--green); line-height:1; }
+.metric .lab{ font-family:var(--sans); font-size:30px; font-weight:700; color:var(--text); margin-top:22px; }
+.metric .det{ font-family:var(--sans); font-size:21px; color:var(--muted); margin-top:12px; }
+
+/* === CLOSING === */
+.close-hero{ position:absolute; left:96px; top:200px; width:1400px; z-index:2; }
+.close-hero h1{ font-family:var(--sans); font-weight:900; font-size:88px; margin:0 0 18px; }
+.close-hero .sub{ font-family:var(--sans); font-size:32px; color:var(--muted); margin-bottom:48px; }
+.close-list li{ font-size:26px !important; padding:14px 0 14px 40px !important; }
+.close-list li::before{ top:14px !important; }
+
+/* deck controls */
+.deck-controls{
+    display:flex; gap:10px; align-items:center; font-family:var(--mono);
+    color:#5a6470; font-size:13px; background:rgba(13,17,23,.85);
+    border:1px solid #30363d; border-radius:20px; padding:6px 18px;
+}
+.deck-controls .pg{ color:#39d353; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="deck-viewport"><div class="deck-stage" id="stage">
+
+<!-- === SLIDE 1: TITLE === -->
+<section class="slide active">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/github/<b>build2026</b> · main</span><span class="right">bash — 1920×1080</span></div>
+  <div class="graph" id="graph"></div>
+  <div class="hero">
+    <div class="prompt">$ <span class="cmd">gh build2026 --highlights --lang=zh</span></div>
+    <h1><span class="en">GitHub</span> @ Microsoft<br><span class="en hl">Build 2026</span><br>核心发布亮点<span class="cursor"></span></h1>
+    <div class="sub">2026年6月2日 · 旧金山 — Copilot App · Agentic 工作流 · 模型与平台 · 7月更新</div>
+    <div class="tags"><span class="tag">copilot --cloud</span><span class="tag">/fleet</span><span class="tag">/chronicle</span><span class="tag">/security-review</span></div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> 15 slides loaded</span><span>nickhou1983 · JUL 2026</span></div>
+</section>
+
+<!-- === SLIDE 2: POSITIONING TRIAD === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>positioning</b></span><span class="right">00 · OVERVIEW</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">copilot</span> <span class="arg">--list-surfaces</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">GitHub Copilot:</span> 开发者 + 新的定位</h2>
+    <div class="tagline rv rv2">从 IDE 插件到 SDK 集成，灵活选择最适合团队的 AI 编程接入路径</div>
+    <div class="triad">
+      <div class="col rv rv3">
+        <div class="num">01</div><div class="icon">💻</div>
+        <h3>GitHub Copilot</h3><div class="role">代码驱动开发 · IDE 原生集成</div>
+        <ul class="fl">
+          <li><b>覆盖主流 IDE</b> — VS Code · JetBrains · Xcode · Neovim</li>
+          <li><b>第三方 Agent 支持</b> — 接入 Claude / Codex Agent</li>
+          <li><b>Agent + Skill</b> — Agentic 编码，支持 Skill / MCP</li>
+          <li><b>Copilot CLI / OpenCode</b> — 终端内辅助编码</li>
+        </ul>
+      </div>
+      <div class="col rv rv4">
+        <div class="num">02</div><div class="icon">🌐</div>
+        <h3>GitHub Copilot App</h3><div class="role">Agent 驱动开发 · 终端优先</div>
+        <ul class="fl">
+          <li><b>轻量级 Agent App</b> — 面向业务人员的 Agent 工作台</li>
+          <li><b>轻量终端工作流</b> — 设置工作流，自动化工作负载</li>
+          <li><b>多模型支持</b> — 直接使用 Copilot 后端模型</li>
+          <li><b>开源可扩展</b> — 社区驱动，自定义 Agent 与工具</li>
+        </ul>
+      </div>
+      <div class="col rv rv5">
+        <div class="num">03</div><div class="icon">🔧</div>
+        <h3>GitHub Copilot SDK</h3><div class="role">流程中的智能体 · 嵌入平台</div>
+        <ul class="fl">
+          <li><b>集成现有平台</b> — 嵌入自研 IDE / DevOps / 工具链</li>
+          <li><b>流程自动化</b> — 代码生成、审查、测试自动化</li>
+          <li><b>企业级扩展</b> — 通用 Agent 场景（如 Clawpilot）</li>
+          <li><b>API 级控制</b> — 模型选择 / 上下文 / 权限 / 会话</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> 3 surfaces detected</span><span>02 / 15</span></div>
+</section>
+
+<!-- === SLIDE 3: 01 NEW PRODUCT — COPILOT APP === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>copilot-app</b></span><span class="right">01 · NEW PRODUCT</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">copilot app</span> <span class="arg">--features --plan=all</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">GitHub Copilot App</span></h2>
+    <div class="tagline rv rv2">Agent-Native 桌面体验 — 已面向所有 Copilot 计划开放（含 Free / Education，2026.7）</div>
+    <div class="grid g3">
+      <div class="card rv rv3"><h3>多会话并行编排 <span class="badge amber">技术预览</span></h3><p>使用 git worktrees 隔离，可同时运行多个 agent 会话，互不干扰</p></div>
+      <div class="card rv rv3"><h3>Canvases 画布 <span class="badge">全新</span></h3><p>Agent 与人类共享的可视化协作工作界面，实时同步进展</p></div>
+      <div class="card rv rv4"><h3>Agent Merge <span class="badge">全新</span></h3><p>从 PR 创建到代码合并的全流程自动化处理</p></div>
+      <div class="card rv rv4"><h3>语音对话 &amp; 任务调度 <span class="badge">GA</span></h3><p>自然语言语音交互 + Prompt Scheduling 自动化任务编排</p></div>
+      <div class="card rv rv5"><h3>Cloud Sessions <span class="badge amber">预览</span></h3><p>本地会话可随处继续，跨设备无缝切换工作上下文</p></div>
+      <div class="card rv rv5"><h3>/security-review 安全审查 <span class="badge blue">7月更新</span></h3><p>公开预览：在 App 内对本地在途代码变更进行 AI 漏洞扫描，补充 code scanning / Dependabot</p></div>
+    </div>
+    <div class="hint rv rv6"><b>$ platforms:</b> Windows · macOS · Linux — 2026.7 起全员可用（Business/Enterprise 需启用 Copilot CLI 策略）</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> app --version 2026.7</span><span>03 / 15</span></div>
+</section>
+
+<!-- === SLIDE 4: 02 AGENTIC === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>agentic</b></span><span class="right">02 · AGENTIC</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">copilot</span> <span class="arg">--capabilities agentic</span></div>
+    <h2 class="sec rv rv1">Agentic 能力<span class="hl">全面升级</span></h2>
+    <div class="tagline rv rv2">从代码补全助手迈向自主执行的智能 Agent</div>
+    <div class="grid g3">
+      <div class="card rv rv3"><h3>Cloud &amp; Local Sandboxes <span class="badge amber">公开预览</span></h3><p>Copilot 可在安全隔离的沙箱中运行，支持本地和云端双模式</p></div>
+      <div class="card rv rv3"><h3>/agentfinder 智能发现 <span class="badge">全新</span></h3><p>根据任务上下文自动发现并匹配最合适的 Agent 与 Skill，无需手动检索</p></div>
+      <div class="card rv rv4"><h3>/chronicle 记忆持久化 <span class="badge">全新</span></h3><p>跨会话记住项目上下文、决策历史和代码架构，持续积累代码库理解</p></div>
+      <div class="card rv rv4"><h3>/fleet 多 Agent 编排 <span class="badge amber">预览</span></h3><p>同时调度多个 Agent 并行处理任务、协调依赖，大幅提升复杂项目交付效率</p></div>
+      <div class="card rv rv5"><h3>AI 辅助合并冲突解决 <span class="badge blue">智能</span></h3><p>智能分析冲突上下文，减少手动处理合并冲突的工作量</p></div>
+      <div class="card rv rv5"><h3>Self-Review 自审查 <span class="badge blue">自动化</span></h3><p>Agent 提交 PR 前自动对自身代码进行审查并修复发现的问题</p></div>
+    </div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> 6 capabilities online</span><span>04 / 15</span></div>
+</section>
+
+<!-- === SLIDE 5: DEEP DIVE — SANDBOXES === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/deep-dive/<b>sandboxes</b></span><span class="right">02 · DEEP DIVE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">/sandbox</span> <span class="arg">enable && copilot --cloud</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">Sandboxes</span> 安全沙箱详解</h2>
+    <div class="tagline rv rv2">隔离执行环境，让 Agentic 工作流安全可控（公开预览）</div>
+    <div class="grid g2">
+      <div class="col rv rv3">
+        <div class="col-title">🖥️ 本地沙箱 Local Sandbox</div>
+        <ul class="fl">
+          <li>会话内 <code>/sandbox enable</code> 一键开启</li>
+          <li>限制 Copilot 对<b>文件系统、网络、系统能力</b>的访问</li>
+          <li>基于 <b>Microsoft MXC</b> 技术，macOS / Linux（Windows Insiders）</li>
+          <li>企业可通过 <b>Intune / MDM</b> 集中下发沙箱策略</li>
+          <li>包含在 Copilot 席位中，<b>免费</b></li>
+        </ul>
+      </div>
+      <div class="col alt rv rv4">
+        <div class="col-title">☁️ 云端沙箱 Cloud Sandbox</div>
+        <ul class="fl">
+          <li><code>copilot --cloud</code> 启动 GitHub 托管的临时 Linux 环境</li>
+          <li>基于 <b>Azure Container Apps Sandboxes</b>，会话完全隔离</li>
+          <li>跨设备续接：Stopped 状态自动快照，随处恢复</li>
+          <li>并行卸载算力，不占本地资源；复用 Cloud Agent 策略</li>
+          <li>按量计费：<b>Compute / Memory / 快照存储</b>三项计量</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hint rv rv5">🔐 复用现有 Copilot 认证，无需配置云厂商 · 生命周期：<b>Active → Stopped（快照保留）→ Deleted</b></div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> sandbox: isolated</span><span>05 / 15</span></div>
+</section>
+
+<!-- === SLIDE 6: DEEP DIVE — /CHRONICLE === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/deep-dive/<b>chronicle</b></span><span class="right">02 · DEEP DIVE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">/chronicle</span> <span class="arg">"我上周做了什么？"</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">/chronicle</span> 会话记忆详解</h2>
+    <div class="tagline rv rv2">可搜索的跨平台会话历史 — 让 Agent 记住你做过的一切</div>
+    <div class="grid g3">
+      <div class="card rv rv3"><h3>自然语言查询历史 <span class="badge">查询</span></h3><p>"我上周做了什么？"、"上次怎么处理认证的？" — Copilot 直接搜索过往会话作答</p></div>
+      <div class="card rv rv3"><h3>会话恢复 Resume <span class="badge">恢复</span></h3><p>在任意历史会话的中断处继续工作，文件与上下文完整还原</p></div>
+      <div class="card rv rv4"><h3>Standup / Tips / 成本分析 <span class="badge blue">洞察</span></h3><p>专用子命令自动生成站会报告、个性化建议、Token 成本分析与自定义指令优化建议</p></div>
+      <div class="card rv rv4"><h3>本地 SQLite + 云同步 <span class="badge blue">架构</span></h3><p>会话记录于 ~/.copilot/session-state/ 与本地会话库，默认同步到 GitHub 账户</p></div>
+      <div class="card rv rv5"><h3>跨平台会话聚合 <span class="badge amber">聚合</span></h3><p>覆盖 CLI、VS Code、JetBrains、Copilot App、Cloud Agent、Code Review 全部会话</p></div>
+      <div class="card rv rv5"><h3>数据仅本人可见 <span class="badge amber">隐私</span></h3><p>remoteExport 可关闭同步；/session delete/prune 管理删除；可选分享只读视图</p></div>
+    </div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> sessions indexed: all</span><span>06 / 15</span></div>
+</section>
+
+<!-- === SLIDE 7: DEEP DIVE — /FLEET === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/deep-dive/<b>fleet</b></span><span class="right">02 · DEEP DIVE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">/fleet</span> <span class="arg">"重构 API + 更新文档 + 补测试"</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">/fleet</span> 多 Agent 编排详解</h2>
+    <div class="tagline rv rv2">编排器像项目负责人一样分工：分解 → 并行派发 → 验证汇总</div>
+    <div class="grid g2">
+      <div class="col rv rv3">
+        <div class="col-title">⚙️ 工作原理（5 步）</div>
+        <ul class="fl">
+          <li><b>分解任务</b> — 拆为带依赖关系的独立工作项</li>
+          <li><b>识别并行性</b> — 无依赖项并行，有依赖项串行</li>
+          <li><b>派发子 Agent</b> — 各自独立上下文，共享文件系统</li>
+          <li><b>轮询进度</b> — 完成后派发下一波任务</li>
+          <li><b>验证汇总</b> — 校验输出并合成最终交付物</li>
+        </ul>
+      </div>
+      <div class="col alt rv rv4">
+        <div class="col-title">🎯 使用要点与注意</div>
+        <ul class="fl">
+          <li><b>明确交付物</b> — 每项对应具体文件，模糊 prompt 退化为串行</li>
+          <li><b>声明依赖与边界</b> — 指定目录归属、禁改范围、验证标准</li>
+          <li><b>自定义 Agent</b> — <code>.github/agents/</code> 定义专职 Agent，按任务配模型</li>
+          <li>⚠️ <b>无文件锁</b> — 多 Agent 写同一文件会静默覆盖，须分区</li>
+          <li>⚠️ <b>上下文自包含</b> — 子 Agent 看不到编排器会话历史</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hint rv rv5">💡 适合多文件重构、批量文档、API+UI+测试并行；线性单文件任务不划算 · <b>/tasks</b> 查看运行中的子 Agent</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> orchestrator: ready</span><span>07 / 15</span></div>
+</section>
+
+<!-- === SLIDE 8: DEEP DIVE — RUBBER DUCK & SECURITY REVIEW === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/deep-dive/<b>agents</b></span><span class="right">02 · DEEP DIVE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">/rubber-duck</span> <span class="arg">&amp;&amp;</span> <span class="cmd">/security-review</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">Rubber Duck &amp; Security Review</span> Agent</h2>
+    <div class="tagline rv rv2">质量与安全双守门员 — 跨模型评审 + 预提交漏洞扫描</div>
+    <div class="grid g2">
+      <div class="col rv rv3">
+        <div class="col-title">🦆 Rubber Duck（GA）</div>
+        <ul class="fl">
+          <li><b>跨模型评审</b> — 刻意用不同模型家族做批评家（Claude 主会话 ↔ GPT 评审），规避同源盲区</li>
+          <li><b>高杠杆时机自动咨询</b> — 规划后实现前、复杂实现中途、写完测试后、反复失败时</li>
+          <li><b>只报真问题</b> — bug / 逻辑错误 / 设计缺陷 / 性能瓶颈，不评论风格与命名</li>
+          <li><b>分级反馈</b> — Blocking / Non-blocking / Suggestions，附具体修复建议</li>
+          <li><b>只读权限</b> — 不改文件，采纳与否由主 Agent 决定；<code>/rubber-duck</code> 可手动调用</li>
+        </ul>
+      </div>
+      <div class="col alt rv rv4">
+        <div class="col-title">🔒 Security Review（公开预览）</div>
+        <ul class="fl">
+          <li><b>预提交扫描</b> — <code>/security-review</code> 对本地 diff 做 LLM 上下文推理，代码进 PR/CI 前发现漏洞</li>
+          <li><b>覆盖 11 类高危漏洞</b> — SQLi / XSS / SSRF / 越权 / 弱加密 / 硬编码凭据 / 供应链 / XPIA 跨提示注入</li>
+          <li><b>高置信度过滤</b> — 每条附严重度 + 置信度 + 修复建议，降低误报噪音</li>
+          <li><b>轻量补充</b> — 独立于 code scanning / Dependabot，可配合 GitHub MCP 调用真实扫描</li>
+          <li><b>多端可用</b> — Copilot CLI（实验模式）与 Copilot App，全计划开放</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hint rv rv5">🎯 组合拳：<b>Rubber Duck</b> 把关计划与实现质量 · <b>Security Review</b> 把关安全 — AI 写的代码由 AI 先自查</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> 2 guardians active</span><span>08 / 15</span></div>
+</section>
+
+<!-- === SLIDE 9: 03 DEVELOPER EXPERIENCE === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>dev-experience</b></span><span class="right">03 · DEVELOPER EXPERIENCE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">copilot</span> <span class="arg">--everywhere</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">CLI &amp; IDE</span> 体验</h2>
+    <div class="tagline rv rv2">Copilot CLI 成为跨所有 IDE 的统一 Agent 入口</div>
+    <div class="grid g2">
+      <div class="col rv rv3">
+        <div class="col-title">⌨️ Copilot CLI 大版本刷新</div>
+        <ul class="fl">
+          <li><b>Rubber Duck 橡皮鸭调试</b> → 正式 GA</li>
+          <li><b>Prompt Scheduling</b> → 正式 GA</li>
+          <li><b>Voice Input 语音输入</b> → 正式 GA</li>
+          <li><b>实验性终端界面</b> — Issues / PR / Gists 标签页，<code>/experimental</code> 即可体验</li>
+          <li><b>内置 Debugger Skill</b>（2026.7）— Agent 驱动调试工作流</li>
+        </ul>
+      </div>
+      <div class="col alt rv rv4">
+        <div class="col-title">🧩 IDE &amp; 终端集成</div>
+        <ul class="fl">
+          <li><b>JetBrains IDEs</b> — CLI + Agent Picker + Slash Commands；7月新增 BYOK 自定义端点、Claude agent provider、本地沙箱</li>
+          <li><b>VS Code 1.130</b>（2026.7）— Agent Host 架构（AHP），多 harness + worktree 隔离 + 辅助权限审批</li>
+          <li><b>Eclipse</b> — BYOK / Skills / Chat 全面升级</li>
+          <li><b>Intelligent Terminal 0.1</b>（实验性开源 fork）— Windows Terminal 原生 Agent 集成 + 错误自动检测</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hint rv rv5">🎯 亮点：<b>Copilot CLI</b> 正式成为跨所有 IDE 平台的统一 Agentic 体验入口</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> surfaces: cli · ide · terminal</span><span>09 / 15</span></div>
+</section>
+
+<!-- === SLIDE 9b: ARCHITECTURE CONVERGENCE === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/deep-dive/<b>architecture</b></span><span class="right">03 · DEEP DIVE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">code agent host</span> <span class="arg">--protocol=ahp --harness=copilot</span></div>
+    <h2 class="sec rv rv1">架构收敛：<span class="en hl">一个 Agent 内核</span>，多个表面</h2>
+    <div class="tagline rv rv2">Copilot SDK / CLI 成为统一运行时 — App、VS Code、JetBrains 均为其"显示与控制层"</div>
+    <div class="grid g2">
+      <div class="col rv rv3">
+        <div class="col-title">🧠 统一运行时的官方证据</div>
+        <ul class="fl">
+          <li><b>Copilot App</b> — 构建于 CLI 之上：企业须启用 CLI 策略；CLI 会话直接进入 My Work 视图</li>
+          <li><b>VS Code Agent Host</b> — Copilot harness 由 <b>Copilot SDK</b> 驱动，官方明确"行为与 CLI / App 对齐"</li>
+          <li><b>JetBrains IDEs</b> — 内嵌 Copilot CLI + Agent Picker + Slash Commands</li>
+          <li><b>Windows Terminal</b> — Copilot CLI 作为默认 Agent 体验</li>
+          <li><b>Copilot SDK</b> — 暴露驱动 Cloud Agent 与 CLI 的同一套生产级 runtime</li>
+        </ul>
+      </div>
+      <div class="col alt rv rv4">
+        <div class="col-title">🔌 VS Code AHP 架构要点</div>
+        <ul class="fl">
+          <li><b>Agent Host 独立进程</b>承载会话，开放协议 <b>AHP</b>（JSON-RPC + 不可变状态/纯 reducer）</li>
+          <li><b>会话与窗口解耦</b> — 关窗口任务照跑，多窗口连同一会话实时同步</li>
+          <li><b>远程执行</b> — <code>code agent host</code> + SSH / dev tunnel，UI 在本地、执行在代码旁</li>
+          <li><b>多 harness 插拔</b> — Copilot / Claude / Codex 统一接入，均支持 worktree 隔离</li>
+          <li><b>客户端贡献工具</b> — 浏览器/扩展工具注册进会话，调用路由回贡献方</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hint rv rv5">💡 一次发布，处处可用：功能做在 runtime 层，各表面只需接入 — <b>AHP 之于 Agent，如同 LSP 之于语言服务器</b></div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> runtime: unified</span><span>10 / 15</span></div>
+</section>
+
+<!-- === SLIDE 10: 04 MODELS & PLATFORM === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>models</b></span><span class="right">04 · MODELS &amp; PLATFORM</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">copilot models</span> <span class="arg">--list --all</span></div>
+    <h2 class="sec rv rv1">模型 &amp; <span class="en hl">平台</span></h2>
+    <div class="tagline rv rv2">多模型生态 + 统一 SDK 平台架构</div>
+    <div class="grid g3">
+      <div class="card rv rv3"><h3>MAI-Code-1-Flash <span class="badge">新模型</span></h3><p>微软自研代码模型，在 Copilot 模型选择器中直接可用，针对代码任务优化</p></div>
+      <div class="card rv rv3"><h3>Gemini 3.1 Pro / 3.5 Flash <span class="badge blue">扩展</span></h3><p>Google 模型扩展支持到 CLI、Cloud Agent、Copilot App、SDK 全链路</p></div>
+      <div class="card rv rv4"><h3>BYOK / BYOM <span class="badge amber">方向</span></h3><p>团队可使用符合性能、成本和合规要求的本地或云端模型</p></div>
+      <div class="card rv rv4"><h3>Copilot SDK 统一平台 <span class="badge blue">平台</span></h3><p>所有 Copilot 表面基于同一 SDK 构建，加速功能交付和生态集成</p></div>
+      <div class="card rv rv5"><h3>GPT-5.6 家族（Sol/Terra/Luna）<span class="badge">7月更新</span></h3><p>Sol 最强推理 · Terra 均衡默认 · Luna 轻量高性价比，已在模型选择器中陆续可用</p></div>
+      <div class="card rv rv5"><h3>Claude Opus 5 · Gemini 3.6 Flash <span class="badge">7月更新</span></h3><p>新一代 Anthropic / Google 模型上线 Copilot；注：GitHub Models 服务将于 2026.7.30 退役</p></div>
+    </div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> model picker: 12+ models</span><span>11 / 15</span></div>
+</section>
+
+<!-- === SLIDE 11: 05 GITHUB PLATFORM === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>platform</b></span><span class="right">05 · GITHUB PLATFORM</span></div>
+  <div class="body" style="padding-top:40px">
+    <div class="prompt rv rv1">$ <span class="cmd">gh platform</span> <span class="arg">--changelog 2026-06..2026-07</span></div>
+    <h2 class="sec rv rv1" style="font-size:52px"><span class="en hl">GitHub</span> 平台核心更新</h2>
+    <div class="tagline rv rv2" style="margin-bottom:28px">代码质量 · 安全自动化 · Agentic Workflows · 平台治理（2026 年 6–7 月）</div>
+    <div class="grid g2" style="gap:16px">
+      <div class="card rv rv3" style="padding:20px 26px"><h3 style="font-size:24px">GitHub Code Quality 正式商用 <span class="badge">GA · 7/20</span></h3><p style="font-size:19px">检测可维护性/可靠性问题、质量门禁、覆盖率追踪；公开预览期超 1 万家企业使用，定价 $10/活跃提交者/月</p></div>
+      <div class="card rv rv3" style="padding:20px 26px"><h3 style="font-size:24px">Agentic Autofix 安全自动修复 <span class="badge amber">公开预览</span></h3><p style="font-size:19px">Code scanning 告警由 Agent 自动生成修复；CodeQL 2.26 新增 AI 提示注入（Prompt Injection）检测</p></div>
+      <div class="card rv rv4" style="padding:20px 26px"><h3 style="font-size:24px">GitHub Agentic Workflows <span class="badge amber">公开预览 · 6/11</span></h3><p style="font-size:19px">用自然语言 Markdown 定义自动化（issue 分诊、CI 失败分析、文档更新），编译为标准 Actions YAML</p></div>
+      <div class="card rv rv4" style="padding:20px 26px"><h3 style="font-size:24px">Agent HQ / Mission Control <span class="badge blue">扩展中</span></h3><p style="font-size:19px">统一编排任意 Agent（Copilot / Claude / Codex）于 GitHub、Mobile、VS Code；7月新增 Issues 中的 Agent 自动化控制</p></div>
+      <div class="card rv rv5" style="padding:20px 26px"><h3 style="font-size:24px">Dependabot 3 天冷静期 <span class="badge blue">默认开启 · 7月</span></h3><p style="font-size:19px">版本更新 PR 默认延迟 3 天，留出审查窗口；安全更新不受影响，可配置</p></div>
+      <div class="card rv rv5" style="padding:20px 26px"><h3 style="font-size:24px">Copilot Code Review 平台审查 <span class="badge">闭环</span></h3><p style="font-size:19px">PR 阶段 AI 审查：行级评论 + 一键应用修复，审查意见可转交 Cloud Agent 生成修复 PR；支持组织规范与复杂度智能路由</p></div>
+    </div>
+    <div class="hint rv rv6" style="margin-top:18px;padding:14px 24px;font-size:19px"><b>+ PR 仪表盘 &amp; 用量洞察（GA）</b> — 全新 Pull Requests 仪表盘；仓库级 Copilot 用量指标 API + 影响力仪表盘，支撑 AI-readiness 报告</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> 7 updates shipped</span><span>12 / 15</span></div>
+</section>
+
+<!-- === SLIDE 12: 06 KEY METRICS === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>metrics</b></span><span class="right">06 · KEY METRICS</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">gh stats</span> <span class="arg">--global --yoy</span></div>
+    <h2 class="sec rv rv1">关键<span class="hl">数据</span></h2>
+    <div class="tagline rv rv2">Agentic 工作流正在重塑 GitHub 平台规模</div>
+    <div class="metrics">
+      <div class="metric rv rv3">
+        <div class="val">14亿+</div>
+        <div class="lab">每月 Commits</div>
+        <div class="det">同比翻倍增长，Agent 驱动的自动化提交激增</div>
+      </div>
+      <div class="metric rv rv4">
+        <div class="val">20亿+</div>
+        <div class="lab">每周 Actions 分钟数</div>
+        <div class="det">CI/CD 与 Agentic 工作流共同驱动</div>
+      </div>
+    </div>
+    <div class="hint rv rv5" style="text-align:center;font-size:24px">从 <b>prompt</b> 到 <b>plan</b>，从 <b>issue</b> 到 <b>merged PR</b> — Agent 驱动的开发正在重塑整个软件交付流程</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> telemetry synced</span><span>13 / 15</span></div>
+</section>
+
+<!-- === SLIDE 13: 07 TOKEN EFFICIENCY === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>token-efficiency</b></span><span class="right">07 · TOKEN EFFICIENCY</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">copilot optimize</span> <span class="arg">--tokens --report</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">Token</span> 效率优化技术</h2>
+    <div class="tagline rv rv2">Harness 层优化 · 缓存复用 · 工具按需加载 · 传输加速 · 智能模型路由</div>
+    <div class="grid g3">
+      <div class="card rv rv3"><h3>Prompt 缓存复用 <span class="badge">缓存</span></h3><p>复用 prefix 模型状态，缓存命中最高便宜 10×；OpenAI 延长缓存保留至 24 小时</p></div>
+      <div class="card rv rv3"><h3>精明缓存断点 (Anthropic) <span class="badge">~94% 命中</span></h3><p>手动放置最多 4 个 cache_control 断点，Agentic 场景缓存命中率约 94%</p></div>
+      <div class="card rv rv4"><h3>工具按需加载 Tool Search <span class="badge blue">-9~18%</span></h3><p>defer_loading 延迟加载工具定义而非全量预载，整体 token 降 9–18%</p></div>
+      <div class="card rv rv4"><h3>客户端语义工具搜索 <span class="badge blue">语义检索</span></h3><p>用 Copilot embedding 向量按意图匹配工具，延迟更低，用户错误率降 4%</p></div>
+      <div class="card rv rv5"><h3>WebSockets 传输 <span class="badge amber">TTFT -16~19%</span></h3><p>Responses API 长连接，TTFT 降 16–19%；GPT-5.2+ 已默认启用</p></div>
+      <div class="card rv rv5"><h3>Auto 智能模型路由 <span class="badge amber">最高省 72.5%</span></h3><p>HyDRA 任务感知 + 缓存感知路由，按任务选模型，覆盖 16 语系</p></div>
+    </div>
+    <div class="hint rv rv6">🧭 下一步方向：<b>专用子代理 (Subagents)</b> 将窄任务交给最便宜模型，主模型不再为辅助工作买单</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> savings: up to 72.5%</span><span>14 / 15</span></div>
+</section>
+
+<!-- === SLIDE 14: CLOSING === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/<b>summary</b></span><span class="right">EOF</span></div>
+  <div class="close-hero">
+    <div class="prompt rv rv1">$ <span class="cmd">git commit -m</span> <span class="arg">"from assistant to autonomous agent"</span></div>
+    <h1 class="rv rv2">🚀 从助手到<span style="color:var(--green)">自主 Agent</span></h1>
+    <div class="sub rv rv3">GitHub Copilot 正在重新定义开发者工作流</div>
+    <ul class="fl close-list">
+      <li class="rv rv4"><b>桌面 App</b> 成为 Agent 编排中心</li>
+      <li class="rv rv4"><b>安全沙箱</b>让 Agent 执行更可信</li>
+      <li class="rv rv5"><b>Code Review 闭环</b>：审查 → 修复 → 合并</li>
+      <li class="rv rv5"><b>多模型生态</b>满足不同场景需求</li>
+      <li class="rv rv6"><b>CLI 统一入口</b>，全平台 Agent 体验一致</li>
+    </ul>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> exit 0</span><span>github.blog · Microsoft Build 2026 · 旧金山</span></div>
+</section>
+
+</div></div>
+
+<div class="deck-controls"><span>← → / SPACE</span><span class="pg" id="pg">1 / 15</span></div>
+
+<script>
+/* === STAGE SCALING === */
+const stage = document.getElementById('stage');
+function fit(){
+    const k = Math.min(innerWidth/1920, innerHeight/1080);
+    const x = (innerWidth - 1920*k)/2, y = (innerHeight - 1080*k)/2;
+    stage.style.transform = `translate(${x}px,${y}px) scale(${k})`;
+}
+fit(); addEventListener('resize', fit);
+
+/* === CONTRIBUTION GRAPH (title slide) === */
+const g = document.getElementById('graph');
+for(let i=0;i<126;i++){
+    const e = document.createElement('i'); const r = Math.random();
+    e.className = r>.82?'l4':r>.62?'l3':r>.42?'l2':r>.25?'l1':'';
+    e.style.animationDelay = (i*9)+'ms'; g.appendChild(e);
+}
+
+/* === NAVIGATION === */
+const slides = [...document.querySelectorAll('.slide')];
+let cur = Math.max(0, Math.min(slides.length-1, (parseInt(location.hash.slice(1))||1)-1));
+function show(n){
+    cur = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,i)=>s.classList.toggle('active', i===cur));
+    document.getElementById('pg').textContent = (cur+1)+' / '+slides.length;
+    history.replaceState(null,'','#'+(cur+1));
+}
+show(cur);
+addEventListener('keydown', e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){ e.preventDefault(); show(cur+1); }
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); show(cur-1); }
+    else if(e.key==='Home') show(0);
+    else if(e.key==='End') show(slides.length-1);
+});
+/* touch swipe */
+let tx=null, ty=null;
+addEventListener('touchstart', e=>{ tx=e.touches[0].clientX; ty=e.touches[0].clientY; }, {passive:true});
+addEventListener('touchend', e=>{
+    if(tx===null) return;
+    const dx = e.changedTouches[0].clientX-tx, dy = e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) show(cur + (dx<0?1:-1));
+    tx=ty=null;
+}, {passive:true});
+/* click to advance (ignore text selection areas) */
+addEventListener('click', e=>{ if(!getSelection().toString()) show(cur+1); });
+</script>
+</body>
+</html>
