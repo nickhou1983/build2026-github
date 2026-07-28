@@ -225,15 +225,16 @@
       <div class="slide-inner">
         <div class="section-num">01 · NEW PRODUCT</div>
         <h2>GitHub Copilot App</h2>
-        <p class="slide-subtitle">Agent-Native 桌面体验（技术预览）— 面向所有付费用户开放</p>
+        <p class="slide-subtitle">Agent-Native 桌面体验 — 已面向所有 Copilot 计划开放（含 Free / Education，2026.7）</p>
         <div class="cards-grid">
           <div class="card accent-green"><span class="badge badge-preview">技术预览</span><h3>多会话并行编排</h3><p>使用 git worktrees 隔离，可同时运行多个 agent 会话，互不干扰</p></div>
           <div class="card accent-blue"><span class="badge badge-new">全新</span><h3>Canvases 画布</h3><p>Agent 与人类共享的可视化协作工作界面，实时同步进展</p></div>
           <div class="card accent-purple"><span class="badge badge-new">全新</span><h3>Agent Merge</h3><p>从 PR 创建到代码合并的全流程自动化处理</p></div>
           <div class="card accent-orange"><span class="badge badge-ga">GA</span><h3>语音对话 & 任务调度</h3><p>自然语言语音交互 + Prompt Scheduling 自动化任务编排</p></div>
           <div class="card accent-blue"><span class="badge badge-preview">预览</span><h3>Cloud Sessions</h3><p>本地会话可随处继续，跨设备无缝切换工作上下文</p></div>
+          <div class="card accent-green"><span class="badge badge-new">7月更新</span><h3>/security-review 安全审查</h3><p>公开预览：在 App 内对本地在途代码变更进行 AI 漏洞扫描，补充 code scanning / Dependabot</p></div>
         </div>
-        <div class="highlight-box">支持平台：Windows · macOS · Linux</div>
+        <div class="highlight-box">支持平台：Windows · macOS · Linux · 2026.7 起全员可用（Business/Enterprise 需启用 Copilot CLI 策略）</div>
       </div>
     </section>
 
@@ -264,6 +265,7 @@
           <div class="card accent-purple"><span class="badge badge-preview">公开预览</span><h3>Agent Skills + MCP 支持</h3><p>将组织级上下文（工具链、编码标准、MCP 协议）引入每次代码审查，实现更精准、更贴合团队规范的反馈</p></div>
           <div class="card accent-blue"><span class="badge badge-new">新增</span><h3>Medium Analysis Tier</h3><p>复杂 PR 自动路由到更高推理能力模型进行深度分析，简单变更使用快速模型，实现成本与质量的最优平衡</p></div>
           <div class="card accent-orange"><span class="badge badge-exp">技术预览</span><h3>Copilot Code Review for Azure Repos</h3><p>直接在 Azure DevOps 的 Pull Request 中请求 Copilot 代码审查，无需切换到 GitHub 平台</p></div>
+          <div class="card accent-green"><span class="badge badge-new">7月更新</span><h3>自定义审查环境 copilot-code-review.yml</h3><p>支持防火墙、自定义 setup 步骤与独立 runner 配置；自定义指令改从 head 分支读取，便于测试验证</p></div>
         </div>
       </div>
     </section>
@@ -283,12 +285,14 @@
               <li><strong>Voice Input 语音输入</strong> → 正式 GA</li>
               <li><strong>实验性终端界面</strong> — Issues / PR / Gists 标签页</li>
               <li>通过 <code>/experimental</code> 命令即可体验</li>
+              <li><strong>内置 Debugger Skill</strong>（2026.7）— Agent 驱动调试工作流</li>
             </ul>
           </div>
           <div>
             <div class="col-header blue">IDE &amp; 终端集成</div>
             <ul class="feature-list">
-              <li><strong>JetBrains IDEs</strong> — Copilot CLI + Agent Picker + Slash Commands</li>
+              <li><strong>JetBrains IDEs</strong> — Copilot CLI + Agent Picker + Slash Commands；7月新增 BYOK 自定义端点、Claude agent provider、本地沙箱</li>
+              <li><strong>VS Code 1.130</strong>（2026.7）— Agent Host 架构（AHP 协议），Copilot / Claude / Codex 多 harness + worktree 隔离 + 辅助权限审批</li>
               <li><strong>Eclipse</strong> — BYOK / Skills / Chat 全面升级</li>
               <li><strong>Intelligent Terminal 0.1</strong>（实验性开源 fork）</li>
               <li><strong>Windows Terminal</strong> 原生 Agent 集成 + 错误自动检测</li>
@@ -311,6 +315,8 @@
           <div class="card accent-blue"><span class="badge badge-ga">扩展</span><h3>Gemini 3.1 Pro / 3.5 Flash</h3><p>Google 模型扩展支持到 CLI、Cloud Agent、Copilot App、SDK 全链路</p></div>
           <div class="card accent-orange"><span class="badge badge-exp">方向</span><h3>BYOK / BYOM</h3><p>团队可使用符合性能、成本和合规要求的本地或云端模型</p></div>
           <div class="card accent-purple"><span class="badge badge-preview">平台</span><h3>Copilot SDK 统一平台</h3><p>所有 Copilot 表面基于同一 SDK 构建，加速功能交付和生态集成</p></div>
+          <div class="card accent-green"><span class="badge badge-new">7月更新</span><h3>GPT-5.6 家族（Sol / Terra / Luna）</h3><p>Sol 最强推理 · Terra 均衡默认 · Luna 轻量高性价比，已在模型选择器中陆续可用</p></div>
+          <div class="card accent-blue"><span class="badge badge-new">7月更新</span><h3>Claude Opus 5 · Gemini 3.6 Flash</h3><p>新一代 Anthropic / Google 模型上线 Copilot；注：GitHub Models 服务将于 2026.7.30 退役</p></div>
         </div>
       </div>
     </section>
