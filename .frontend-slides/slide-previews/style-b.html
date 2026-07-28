@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub @ Microsoft Build 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F5F4EF;--bg:#ECECE8;--ink:#0A0A0A;--lemon:#E6FF3D;--muted:#8A8A85;--stage:#1A1A1A}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--stage);overflow:hidden}
+.viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.stage{width:1920px;height:1080px;position:relative;transform-origin:center center;background:var(--bg);overflow:hidden}
+.frame{position:absolute;inset:40px;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(8,1fr);gap:12px}
+.cell{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.p-paper{background:var(--paper)}.p-ink{background:var(--ink);color:var(--paper)}.p-lemon{background:var(--lemon);color:var(--ink)}
+.mono{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;font-size:20px}
+/* header strip */
+.hd{grid-column:1/span 12;grid-row:1/span 1;display:flex;align-items:center;justify-content:space-between;padding:0 36px;animation-delay:.05s}
+.hd .mark{display:grid;grid-template-columns:14px 14px;grid-template-rows:14px 14px;gap:4px}
+.hd .mark i{background:var(--ink)}
+.hd.p-lemon .mark i{background:var(--ink)}
+/* title block */
+.title{grid-column:1/span 8;grid-row:2/span 5;padding:64px 60px;display:flex;flex-direction:column;justify-content:flex-end;animation-delay:.15s}
+.title .kicker{font-family:'Space Grotesk';font-weight:700;text-transform:uppercase;letter-spacing:-.5px;font-size:34px;color:var(--lemon);margin-bottom:28px}
+.title h1{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:96px;line-height:1.14;color:var(--paper)}
+.title h1 .en{font-family:'Space Grotesk';font-weight:700;text-transform:uppercase;letter-spacing:-3px}
+/* lemon signal */
+.signal{grid-column:9/span 4;grid-row:2/span 3;padding:44px;display:flex;flex-direction:column;justify-content:space-between;animation-delay:.25s}
+.signal .num{font-family:'Space Grotesk';font-weight:700;font-size:120px;letter-spacing:-6px;line-height:.9}
+.signal p{font-family:'Noto Sans SC';font-weight:700;font-size:28px;line-height:1.5}
+/* stat cells */
+.s1{grid-column:9/span 2;grid-row:5/span 2;animation-delay:.35s}
+.s2{grid-column:11/span 2;grid-row:5/span 2;animation-delay:.42s}
+.stat{padding:32px;display:flex;flex-direction:column;justify-content:space-between}
+.stat b{font-family:'Space Grotesk';font-weight:700;font-size:56px;letter-spacing:-2px}
+.stat span{font-family:'Noto Sans SC';font-size:20px;color:var(--muted)}
+.p-ink .stat span,.stat.p-ink span{color:#9a9a95}
+/* footer strips */
+.f1{grid-column:1/span 8;grid-row:7/span 2;padding:40px 60px;display:flex;align-items:center;gap:48px;animation-delay:.5s}
+.f1 .item{font-family:'Noto Sans SC';font-weight:700;font-size:26px;color:var(--ink);border-left:6px solid var(--ink);padding-left:20px}
+.f2{grid-column:9/span 4;grid-row:7/span 2;display:flex;align-items:center;justify-content:center;animation-delay:.58s}
+.f2 .mono{font-size:24px;font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="viewport"><div class="stage" id="stage">
+  <div class="frame">
+    <div class="cell hd p-lemon">
+      <span class="mark"><i></i><i></i><i></i><i></i></span>
+      <span class="mono">GitHub × Microsoft Build 2026</span>
+      <span class="mono">JUL 2026 · ZH</span>
+    </div>
+    <div class="cell title p-ink">
+      <div class="kicker">Release Highlights</div>
+      <h1><span class="en">GitHub @ Build 2026</span><br>核心发布亮点</h1>
+    </div>
+    <div class="cell signal p-lemon">
+      <div class="num">07</div>
+      <p>大主题：从 Copilot App 到 Agentic 平台</p>
+    </div>
+    <div class="cell s1 stat p-paper"><b>3×</b><span>新模型家族<br>GPT-5.6 / Opus 5</span></div>
+    <div class="cell s2 stat p-ink"><b style="color:var(--lemon)">4+</b><span>Deep Dive<br>专题页</span></div>
+    <div class="cell f1 p-paper">
+      <span class="item">Copilot App</span>
+      <span class="item">Agentic 工作流</span>
+      <span class="item">模型与平台</span>
+    </div>
+    <div class="cell f2 p-ink"><span class="mono" style="color:var(--lemon)">nickhou1983 / build2026</span></div>
+  </div>
+</div></div>
+<script>
+function fit(){const s=document.getElementById('stage');const k=Math.min(innerWidth/1920,innerHeight/1080);s.style.transform=`scale(${k})`;}
+fit();addEventListener('resize',fit);
+</script>
+</body>
+</html>

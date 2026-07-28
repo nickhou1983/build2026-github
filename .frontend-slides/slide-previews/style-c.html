@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub @ Microsoft Build 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;900&family=IBM+Plex+Mono:wght@400;600&family=Noto+Serif+SC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111111;--ink2:#1A1A18;--fire:#E85D26;--cream:#F0ECE5;--muted:#888880;--hint:#505048;--line:#282826}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#000;overflow:hidden}
+.viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.stage{width:1920px;height:1080px;position:relative;transform-origin:center center;background:var(--ink);color:var(--cream);overflow:hidden;font-family:'Barlow',sans-serif}
+.rule{position:absolute;left:80px;right:80px;height:1px;background:var(--line)}
+.r1{top:110px}.r2{bottom:110px}
+.masthead{position:absolute;top:52px;left:80px;right:80px;display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--muted);animation:fade 1s .1s both}
+.masthead b{color:var(--fire);font-weight:600}
+.big{position:absolute;left:74px;top:172px;font-weight:900;font-size:230px;line-height:.92;letter-spacing:-8px;text-transform:lowercase;animation:fade 1s .3s both}
+.big .fire{color:var(--fire)}
+.cn{position:absolute;left:84px;top:660px;font-family:'Noto Serif SC',serif;font-weight:900;font-size:84px;line-height:1.2;animation:fade 1s .55s both}
+.cn .accent{color:var(--fire)}
+.meta{position:absolute;right:80px;top:200px;width:340px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:20px;line-height:2.1;color:var(--muted);animation:fade 1s .7s both}
+.meta .k{color:var(--cream)}
+.meta .f{color:var(--fire)}
+.footer{position:absolute;bottom:48px;left:80px;right:80px;display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:19px;color:var(--hint);animation:fade 1s .85s both}
+.footer .sections{display:flex;gap:34px}
+.footer .sections span{color:var(--muted)}
+.footer .sections span:first-child{color:var(--fire)}
+.stamp{position:absolute;right:80px;bottom:200px;width:190px;height:190px;border:1px solid var(--fire);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:19px;color:var(--fire);line-height:1.7;transform:rotate(12deg);animation:stampIn .7s 1s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes stampIn{from{opacity:0;transform:rotate(12deg) scale(1.6)}to{opacity:1;transform:rotate(12deg) scale(1)}}
+@keyframes fade{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="viewport"><div class="stage" id="stage">
+  <div class="masthead"><span><b>github</b> · microsoft build 2026</span><span>vol.07 — jul 2026</span></div>
+  <div class="rule r1"></div>
+  <div class="big">build<br><span class="fire">twenty</span><br>twenty-six.</div>
+  <div class="cn">核心<span class="accent">发布</span>亮点<br><span style="font-size:40px;font-weight:600;color:var(--muted)">Copilot App · Agentic · 模型与平台</span></div>
+  <div class="meta">
+    <span class="k">copilot app</span> — all plans<br>
+    <span class="k">gpt-5.6</span> — sol/terra/luna<br>
+    <span class="k">claude</span> — opus 5<br>
+    <span class="f">/fleet · /chronicle</span><br>
+    <span class="k">sandboxes</span> — cloud
+  </div>
+  <div class="stamp">agentic<br>era<br>——<br>2026</div>
+  <div class="rule r2"></div>
+  <div class="footer">
+    <div class="sections"><span>01 新品</span><span>02 agentic</span><span>03 开发体验</span><span>04 模型</span><span>05 平台</span></div>
+    <span>nickhou1983 / build2026</span>
+  </div>
+</div></div>
+<script>
+function fit(){const s=document.getElementById('stage');const k=Math.min(innerWidth/1920,innerHeight/1080);s.style.transform=`scale(${k})`;}
+fit();addEventListener('resize',fit);
+</script>
+</body>
+</html>
