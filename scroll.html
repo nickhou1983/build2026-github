@@ -628,6 +628,27 @@
 <nav class="nav-dots" id="navDots"></nav>
 <div class="key-hint">↓ 滚动或按方向键翻页</div>
 
+<!-- Fullscreen Button -->
+<button id="fsBtn" title="全屏播放 (F)" style="position:fixed;top:16px;right:16px;z-index:1001;display:flex;align-items:center;gap:8px;padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#fff;background:rgba(35,134,54,.92);border:1px solid rgba(255,255,255,.25);border-radius:6px;cursor:pointer;transition:opacity .2s">⛶ 全屏播放</button>
+<script>
+  (function(){
+    const fsBtn = document.getElementById('fsBtn');
+    function toggleFS(){
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+    fsBtn.addEventListener('click', toggleFS);
+    document.addEventListener('fullscreenchange', () => {
+      const on = !!document.fullscreenElement;
+      fsBtn.innerHTML = on ? '⛶ 退出全屏' : '⛶ 全屏播放';
+      fsBtn.style.opacity = on ? '0.35' : '1';
+    });
+    fsBtn.addEventListener('mouseenter', () => fsBtn.style.opacity = '1');
+    fsBtn.addEventListener('mouseleave', () => { if (document.fullscreenElement) fsBtn.style.opacity = '0.35'; });
+    document.addEventListener('keydown', e => { if (e.key === 'f' || e.key === 'F') toggleFS(); });
+  })();
+</script>
+
 <!-- SLIDE 1: Title -->
 <section class="slide title-slide" id="slide-1">
   <div class="orb orb-1"></div>
