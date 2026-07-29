@@ -354,6 +354,36 @@
       </div>
     </section>
 
+    <!-- SLIDE 4h: Agentic Harness Deep Dive -->
+    <section data-background-color="#ffffff">
+      <div class="slide-inner">
+        <div class="section-num">02 · DEEP DIVE</div>
+        <h2>Agentic Harness 设计详解</h2>
+        <p class="slide-subtitle">"模型供智能，Harness 供代理力" — Copilot SDK 单一共享内核驱动 CLI / App / Code Review / VS Code</p>
+        <div class="two-col">
+          <div>
+            <div class="col-header blue">🔧 核心设计：三大职责 + Agent Loop</div>
+            <ul class="feature-list">
+              <li><strong>上下文组装</strong> — system prompt、工作区结构、多轮历史、工具结果、跨会话记忆；"模型看到什么"由 Harness 决定</li>
+              <li><strong>工具暴露与执行</strong> — JSON Schema 声明工具，校验参数→执行→回填结果；MCP / 扩展可注入新工具</li>
+              <li><strong>Agent Loop</strong> — think→act→observe 循环：每轮重建 prompt、tool-call 上限、stop hooks、超长历史自动摘要压缩</li>
+              <li><strong>按模型定制</strong> — 每个模型独立 system prompt / 工具集（Claude 用 replace_string，GPT 用 apply_patch）</li>
+            </ul>
+          </div>
+          <div>
+            <div class="col-header orange">📊 多模型架构 + 评测体系</div>
+            <ul class="feature-list">
+              <li><strong>20+ 模型 + BYOK</strong> — Auto 模型选择按任务意图与模型健康度自动挑选，任选效率或峰值质量</li>
+              <li><strong>跨模型能力</strong> — Rubber Duck 跨模型家族互评，单一厂商 Harness 无法实现</li>
+              <li><strong>基准对标</strong> — SWE-bench V/Pro · SkillsBench · TerminalBench · Win-Hill：解决率与 Claude Code / Codex CLI 持平，多数配置更省 Token</li>
+              <li><strong>评测门禁</strong> — 动到工具 / prompt / loop 的 PR 自动跑 benchmark 后才可合并（VSC-Bench）</li>
+            </ul>
+          </div>
+        </div>
+        <div class="highlight-box">🏎️ "模型是引擎，Harness 是整车" — 上下文、工具、循环与评测才是 Copilot 工程主战场</div>
+      </div>
+    </section>
+
     <!-- SLIDE 4a: Sandboxes Deep Dive -->
     <section data-background-color="#ffffff">
       <div class="slide-inner">
