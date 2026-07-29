@@ -280,7 +280,7 @@ ul.fl li code{
     <div class="sub">2026年6月2日 · 旧金山 — Copilot App · Agentic 工作流 · 模型与平台 · 7月更新</div>
     <div class="tags"><span class="tag">copilot --cloud</span><span class="tag">/fleet</span><span class="tag">/chronicle</span><span class="tag">/security-review</span></div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> 16 slides loaded</span><span>nickhou1983 · JUL 2026</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> 17 slides loaded</span><span>nickhou1983 · JUL 2026</span></div>
 </section>
 
 <!-- === SLIDE 2: POSITIONING TRIAD === -->
@@ -324,7 +324,7 @@ ul.fl li code{
       </div>
     </div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> 3 surfaces detected</span><span>02 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> 3 surfaces detected</span><span>02 / 17</span></div>
 </section>
 
 <!-- === SLIDE 9b: ARCHITECTURE CONVERGENCE === -->
@@ -359,7 +359,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv5">💡 一次发布，处处可用：功能做在 runtime 层，各表面只需接入 — <b>AHP 之于 Agent，如同 LSP 之于语言服务器</b></div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> runtime: unified</span><span>03 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> runtime: unified</span><span>03 / 17</span></div>
 </section>
 
 <!-- === SLIDE 3: 01 NEW PRODUCT — COPILOT APP === -->
@@ -380,7 +380,42 @@ ul.fl li code{
     </div>
     <div class="hint rv rv6"><b>$ platforms:</b> Windows · macOS · Linux — 2026.7 起全员可用（Business/Enterprise 需启用 Copilot CLI 策略）</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> app --version 2026.7</span><span>04 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> app --version 2026.7</span><span>04 / 17</span></div>
+</section>
+
+<!-- === SLIDE 3b: DEEP DIVE — CANVASES & AGENT MERGE === -->
+<section class="slide">
+  <div class="tbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+    <span class="path">~/build2026/deep-dive/<b>app-flagship</b></span><span class="right">01 · DEEP DIVE</span></div>
+  <div class="body">
+    <div class="prompt rv rv1">$ <span class="cmd">/create-canvas</span> <span class="arg">&amp;&amp;</span> <span class="cmd">agent merge --auto</span></div>
+    <h2 class="sec rv rv1"><span class="en hl">Canvases &amp; Agent Merge</span> 详解</h2>
+    <div class="tagline rv rv2">Copilot App 双旗舰能力 — 可视化人机协作 + 合并最后一公里自动化</div>
+    <div class="grid g2">
+      <div class="col rv rv3">
+        <div class="col-title">🎨 Canvases 画布（全新）</div>
+        <ul class="fl">
+          <li><b>共享交互界面</b> — Agent 边工作边更新画布，你通过点击 / 编辑交互；操作可回传 Agent 或本地处理</li>
+          <li><b>一句话生成</b> — <code>/create-canvas</code> + 描述即可创建，并可持续让 Copilot 迭代加功能</li>
+          <li><b>典型用例</b> — Issue 滑卡分诊 · 交互式代码库图谱 · Worktree 会话清理 · Prompt 教练 · 跨工具知识发现</li>
+          <li><b>适用场景</b> — 不适合纯对话的任务：分诊 backlog、可视化复杂结构、聚合多源信息</li>
+          <li><b>价值</b> — 把 AI 从对话工具变成可视化、可操作、可游戏化的共享工作空间</li>
+        </ul>
+      </div>
+      <div class="col alt rv rv4">
+        <div class="col-title">🔀 Agent Merge（全新）</div>
+        <ul class="fl">
+          <li><b>四步闭环</b> — 创建 PR → 监控 CI → 修复阻塞 → 全绿后自动合并</li>
+          <li><b>自动处理阻塞</b> — 修复失败 CI · 响应评审意见 · 需要时 rebase / 解决冲突</li>
+          <li><b>后台运行</b> — 跨 App 重启存活；PR 合并后自动关闭该会话</li>
+          <li><b>你仍掌控</b> — 你负责 review &amp; approve，智能体只做机械收尾</li>
+          <li><b>尊重门禁</b> — "as soon as GitHub allows" 才合并，必须过 Ruleset / 分支保护</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hint rv rv5">🎯 一个管"协作界面"，一个管"交付收尾" — Copilot App 从聊天窗口进化为 Agent 工作台</div>
+  </div>
+  <div class="sbar"><span><span class="ok">✓</span> 2 flagships shipped</span><span>05 / 17</span></div>
 </section>
 
 <!-- === SLIDE 4: 02 AGENTIC === -->
@@ -403,7 +438,7 @@ ul.fl li code{
       <div class="card rv rv6"><h3>Agentic Harness 统一引擎 <span class="badge amber">基准公开</span></h3><p>一个 Harness 驱动 20+ 模型 + BYOK，解决率对标厂商官方 Harness 且更省 Token</p></div>
     </div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> 9 capabilities online</span><span>05 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> 9 capabilities online</span><span>06 / 17</span></div>
 </section>
 
 <!-- === SLIDE 5: DEEP DIVE — SANDBOXES === -->
@@ -438,7 +473,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv5">🔐 复用现有 Copilot 认证，无需配置云厂商 · 生命周期：<b>Active → Stopped（快照保留）→ Deleted</b></div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> sandbox: isolated</span><span>06 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> sandbox: isolated</span><span>07 / 17</span></div>
 </section>
 
 <!-- === SLIDE 6: DEEP DIVE — /CHRONICLE === -->
@@ -458,7 +493,7 @@ ul.fl li code{
       <div class="card rv rv5"><h3>数据仅本人可见 <span class="badge amber">隐私</span></h3><p>remoteExport 可关闭同步；/session delete/prune 管理删除；可选分享只读视图</p></div>
     </div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> sessions indexed: all</span><span>07 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> sessions indexed: all</span><span>08 / 17</span></div>
 </section>
 
 <!-- === SLIDE 7: DEEP DIVE — /FLEET === -->
@@ -493,7 +528,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv5">💡 适合多文件重构、批量文档、API+UI+测试并行；线性单文件任务不划算 · <b>/tasks</b> 查看运行中的子 Agent</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> orchestrator: ready</span><span>08 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> orchestrator: ready</span><span>09 / 17</span></div>
 </section>
 
 <!-- === SLIDE 8: DEEP DIVE — RUBBER DUCK & SECURITY REVIEW === -->
@@ -528,7 +563,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv5">🎯 组合拳：<b>Rubber Duck</b> 把关计划与实现质量 · <b>Security Review</b> 把关安全 — AI 写的代码由 AI 先自查</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> 2 guardians active</span><span>09 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> 2 guardians active</span><span>10 / 17</span></div>
 </section>
 
 <!-- === SLIDE 9: 03 DEVELOPER EXPERIENCE === -->
@@ -562,7 +597,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv5">🎯 亮点：<b>Copilot CLI</b> 正式成为跨所有 IDE 平台的统一 Agentic 体验入口</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> surfaces: cli · ide · terminal</span><span>10 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> surfaces: cli · ide · terminal</span><span>11 / 17</span></div>
 </section>
 
 <!-- === SLIDE 10: 04 MODELS & PLATFORM === -->
@@ -582,7 +617,7 @@ ul.fl li code{
       <div class="card rv rv5"><h3>Claude Opus 5 · Gemini 3.6 Flash <span class="badge">7月更新</span></h3><p>新一代 Anthropic / Google 模型上线 Copilot；注：GitHub Models 服务将于 2026.7.30 退役</p></div>
     </div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> model picker: 12+ models</span><span>11 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> model picker: 12+ models</span><span>12 / 17</span></div>
 </section>
 
 <!-- === SLIDE 11: 05 GITHUB PLATFORM === -->
@@ -603,7 +638,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv6" style="margin-top:18px;padding:14px 24px;font-size:19px"><b>+ PR 仪表盘 &amp; 用量洞察（GA）</b> — 全新 Pull Requests 仪表盘；仓库级 Copilot 用量指标 API + 影响力仪表盘，支撑 AI-readiness 报告</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> 7 updates shipped</span><span>12 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> 7 updates shipped</span><span>13 / 17</span></div>
 </section>
 
 <!-- === SLIDE 11b: 05 GOVERNANCE — AGENTIC DLC WORKFLOW & RULESET === -->
@@ -624,7 +659,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv6" style="margin-top:18px;padding:14px 24px;font-size:19px">🎯 <b>AI 加速，不越权</b> — Agent 的所有产出都过同一套 Ruleset 门禁；治理即代码（.github-private + managed-settings.json 企业统一下发）</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> guardrails enforced</span><span>13 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> guardrails enforced</span><span>14 / 17</span></div>
 </section>
 
 <!-- === SLIDE 12: 06 KEY METRICS === -->
@@ -649,7 +684,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv5" style="text-align:center;font-size:24px">从 <b>prompt</b> 到 <b>plan</b>，从 <b>issue</b> 到 <b>merged PR</b> — Agent 驱动的开发正在重塑整个软件交付流程</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> telemetry synced</span><span>14 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> telemetry synced</span><span>15 / 17</span></div>
 </section>
 
 <!-- === SLIDE 13: 07 TOKEN EFFICIENCY === -->
@@ -670,7 +705,7 @@ ul.fl li code{
     </div>
     <div class="hint rv rv6">🧭 下一步方向：<b>专用子代理 (Subagents)</b> 将窄任务交给最便宜模型，主模型不再为辅助工作买单</div>
   </div>
-  <div class="sbar"><span><span class="ok">✓</span> savings: up to 72.5%</span><span>15 / 16</span></div>
+  <div class="sbar"><span><span class="ok">✓</span> savings: up to 72.5%</span><span>16 / 17</span></div>
 </section>
 
 <!-- === SLIDE 14: CLOSING === -->
